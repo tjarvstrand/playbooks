@@ -1,0 +1,34 @@
+---
+- name: Configure Keyboard
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: no
+  tasks:
+    - action: copy
+      name: Copy keyboard layout file
+      args:
+        src: files/usr/share/X11/xkb/symbols/thomas
+        dest: /usr/share/X11/xkb/symbols/thomas
+        backup: yes
+    - action: lineinfile
+      name: Set default keyboard layout
+      args:
+        dest: /etc/default/keyboard
+        regexp: ^XKBLAYOUT
+        line: XKBLAYOUT="thomas"
+    - action: lineinfile
+      name: Set default keyboard layout variant
+      args:
+        dest: /etc/default/keyboard
+        regexp: ^XKBVARIANT
+        line: XKBVARIANT="dvorak"
+    - action: lineinfile
+      name: Set default keyboard layout options
+      args:
+        dest: /etc/default/keyboard
+        regexp: ^XKBOPTION
+        line: XKBOPTION="caps:ctrl_modifier"
+    - shell: dpkg-reconfigure keyboard-configuration -p high
+      name: Set default layout
+    - shell: setxkbmap -layout thomas
+      name: Set current layout
