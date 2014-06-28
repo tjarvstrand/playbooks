@@ -18,17 +18,23 @@
   gather_facts: no
   tasks:
     - action: apt_repository
-      name: "Add apt repositories"
+      name: Add apt repositories
       args:
         repo: "{{item}}"
       with_items:
         - ppa:ubuntu-wine/ppa
         - deb http://repository.spotify.com        stable non-free
         - deb http://archive.canonical.com/ubuntu/ trusty partner
+    - action: apt_key
+      name: Add apt keys
+      args:
+        keyserver: hkp://keyserver.ubuntu.com:80
+        id: 94558F59
     - action: apt
-      name: "Install packages"
+      name: Install packages
       args:
         name: "{{item}}"
+        force: yes
       with_items:
         - adobe-flashplugin
         - curl
@@ -37,10 +43,11 @@
         - git
         - gnome-do
         - skype
+        - spotify-client
         - synaptic
         - terminator
         - ttf-mscorefonts-installer
-	- tree
+        - tree
         - wine
 
         # Emacs
