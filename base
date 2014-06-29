@@ -49,6 +49,7 @@
         - gimp
         - git
         - gnome-do
+        - network-manager-openvpn
         - skype
         - spotify-client
         - synaptic
