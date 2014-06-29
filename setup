@@ -3,3 +3,8 @@
 - include: keyboard
 - include: dropbox
 - include: config
+- include: xmonad
+
+# Local Variables:
+# mode: yaml
+# End:

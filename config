@@ -1,8 +1,6 @@
 ---
 - name: Config files
-  hosts: 127.0.0.1
-  connection: local
-  gather_facts: no
+  hosts: all
   tasks:
     - action: git
       name: Clone git repo
@@ -66,3 +64,19 @@
         src: "~/config-files/.emacs.d/lib"
         dest: "~/.emacs.d/lib"
         state: link
+    - action: file
+      name: Delete local gnome-do config
+      args:
+        state: absent
+        path: ~/.gconf/apps/gnome-do
+    - action: file
+      name: Create gnome-do config symlink
+      args:
+        force: yes
+        src: ~/config-files/.gconf/apps/gnome-do
+        dest: ~/.gconf/apps/gnome-do
+        state: link
+
+# Local Variables:
+# mode: yaml
+# End:

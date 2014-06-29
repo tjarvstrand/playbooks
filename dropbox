@@ -1,8 +1,6 @@
 ---
 - name: Install Dropbox
-  hosts: 127.0.0.1
-  connection: local
-  gather_facts:
+  hosts: all
   tasks:
     - shell: |
         cd ~ &&
@@ -46,3 +44,7 @@
         dest: "~/{{item}}"
       with_items:
        - "{{dropbox_link_dirs}}"
+
+# Local Variables:
+# mode: yaml
+# End:

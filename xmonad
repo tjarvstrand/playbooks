@@ -1,8 +1,6 @@
 ---
 - name: Directories
-  hosts: 127.0.0.1
-  connection: local
-  gather_facts: no
+  hosts: all
   tasks:
     - action: apt
       name: Install packages
@@ -21,3 +19,7 @@
       name: Recompile xmonad
     - shell: gsettings set org.gnome.gnome-panel.layout toplevel-id-list "['top-panel-0']"
       name: Remove all gnome panels except top
+
+# Local Variables:
+# mode: yaml
+# End:

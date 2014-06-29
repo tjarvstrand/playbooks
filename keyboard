@@ -1,8 +1,6 @@
 ---
 - name: Configure Keyboard
-  hosts: 127.0.0.1
-  connection: local
-  gather_facts: no
+  hosts: all
   tasks:
     - action: copy
       name: Backup files
@@ -47,3 +45,7 @@
       name: Add xkb rules to evdev.lst
     - shell: gsettings set org.freedesktop.ibus.general.hotkey triggers []
       name: Disable ibus switcher triggers
+
+# Local Variables:
+# mode: yaml
+# End:
