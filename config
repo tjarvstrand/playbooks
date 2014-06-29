@@ -1,0 +1,50 @@
+---
+- name: Config files
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: no
+  tasks:
+    # - action: git
+    #   name: Clone git repo
+    #   args:
+    #     repo: git@github.com:tjarvstrand/config-files.git
+    #     dest: "~/config-files"
+    - action: file
+      name: Ensure directories
+      args:
+        dest: "~/{{item}}"
+        state: directory
+      with_items:
+        - .config
+    - shell: "find ~/config-files -name '.*'"
+      register: dotfiles
+    - action: file
+      name: Create symlinks
+      args:
+        force: yes
+        src: "{{item}}"
+        dest: "~/{{item | basename}}"
+        state: link
+      with_items:
+        - "{{dotfiles.stdout_lines}}"
+    - action: file
+      name: Create ssh config symlink
+      args:
+        force: yes
+        src: "~/config-files/ssh-config"
+        dest: "~/.ssh/config"
+        state: link
+    - action: file
+      name: Create ssh env symlink
+      args:
+        force: yes
+        src: "~/config-files/ssh-environment"
+        dest: "~/.ssh/environment"
+        state: link
+    - action: file
+      name: Create Terminator config symlink
+      args:
+        force: yes
+        src: "~/config-files/terminator"
+        dest: "~/.config/terminator"
+        state: link
