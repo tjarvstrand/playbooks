@@ -2,25 +2,30 @@
 - name: Install Dropbox
   hosts: all
   tasks:
-    - shell: |
-        cd ~ &&
-        wget -q -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | 
-        tar xzf -
-      name: Fetch and unpack
+    # - shell: |
+    #     cd ~ &&
+    #     wget -q -O - "https://www.dropbox.com/download?plat=lnx.x86_64" |
+    #     tar xzf -
+    #   name: Fetch and unpack
+    #   args:
+    #     creates: ~/.dropbox-dist
+    # - action: get_url
+    #   name: Fetch Dropbox
+    #   args:
+    #     url: "https://www.dropbox.com/download?dl=packages/dropbox.py"
+    #     dest: ~/bin/dropbox.py
+    #     mode: 0755
+    # - command: ~/bin/dropbox.py start
+    #   name: Start
+    #   async: 3600
+    #   poll: 0
+    # - command: ~/bin/dropbox.py autostart y
+    #   name: Enable autostart
+    - action: apt
+      name: Install
       args:
-        creates: ~/.dropbox-dist
-    - action: get_url
-      name: Fetch Dropbox
-      args:
-        url: "https://www.dropbox.com/download?dl=packages/dropbox.py"
-        dest: ~/bin/dropbox.py
-        mode: 0755
-    - command: ~/bin/dropbox.py start
-      name: Start
-      async: 3600
-      poll: 0
-    - command: ~/bin/dropbox.py autostart y
-      name: Enable autostart
+        name: nautilus-dropbox
+        force: yes
     - set_fact:
         dropbox_link_dirs:
           - doc

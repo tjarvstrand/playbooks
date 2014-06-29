@@ -75,7 +75,7 @@
 
         # BankID
         # - ia32-libs
-        - nspluginwrapper
+        # - nspluginwrapper
 
         # tmux
         - libevent-dev
