@@ -16,8 +16,6 @@
         state: directory
       with_items:
         - .config
-    - shell: "find ~/config-files -name '.*'"
-      register: dotfiles
     - action: file
       name: Create symlinks
       args:
@@ -25,8 +23,11 @@
         src: "{{item}}"
         dest: "~/{{item | basename}}"
         state: link
+      with_fileglob:
+        - ~/config-files/.*
       with_items:
-        - "{{dotfiles.stdout_lines}}"
+        - ~/config-files/.xchat2
+        - ~/config-files/.xmonad
     - action: file
       name: Create ssh config symlink
       args:
@@ -40,4 +41,28 @@
         force: yes
         src: "~/config-files/terminator"
         dest: "~/.config/terminator"
+        state: link
+    - action: file
+      name: Create Transmission config dir
+      args:
+        dest: "~/.config/transmission"
+        state: directory
+    - action: file
+      name: Create Transmission config symlink
+      args:
+        force: yes
+        src: "~/config-files/transmission/settings.json"
+        dest: "~/.config/transmission/settings.json"
+        state: link
+    - action: file
+      name: Create Emacs config dir
+      args:
+        path: "~/.emacs.d"
+        state: directory
+    - action: file
+      name: Create Emacs lib symlink
+      args:
+        force: yes
+        src: "~/config-files/.emacs.d/lib"
+        dest: "~/.emacs.d/lib"
         state: link
