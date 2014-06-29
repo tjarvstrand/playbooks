@@ -23,3 +23,26 @@
       poll: 0
     - command: ~/bin/dropbox.py autostart y
       name: Enable autostart
+    - set_fact:
+        dropbox_link_dirs:
+          - doc
+          - src
+          - Desktop
+          - Documents
+          - Pictures
+    - action: file
+      name: Delete directories
+      args:
+        state: absent
+        dest: "~/{{item}}"
+      with_items:
+       - "{{dropbox_link_dirs}}"
+    - action: file
+      name: Create symlinks
+      args:
+        force: yes
+        state: link
+        src: "~/Dropbox/{{item}}"
+        dest: "~/{{item}}"
+      with_items:
+       - "{{dropbox_link_dirs}}"
