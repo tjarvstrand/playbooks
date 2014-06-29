@@ -1,0 +1,21 @@
+---
+- name: Directories
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: no
+  tasks:
+    - action: apt
+      name: Install packages
+      args:
+        name: "{{item}}"
+        force: yes
+      with_items:
+        - gnome-panel
+        - xmonad
+        - libghc-dbus-dev
+        - cabal-install
+    - shell: cabal update
+    - shell: cabal install xmonad-extras
+      name: Install xmonad-extras
+    - shell: xmonad --recompile
+      name: Recompile xmonad

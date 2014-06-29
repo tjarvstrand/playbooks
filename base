@@ -76,11 +76,6 @@
         - libwxgtk2.8-dev
         - freeglut3-dev
 
-        # Xmonad
-        - gnome-panel
-        - xmonad
-        - libghc-dbus-dev
-
         # BankID
         # - ia32-libs
         - nspluginwrapper
