@@ -35,8 +35,8 @@
       name: Set default keyboard layout options
       args:
         dest: /etc/default/keyboard
-        regexp: ^XKBOPTION
-        line: XKBOPTION="caps:ctrl_modifier"
+        regexp: ^XKBOPTIONS
+        line: XKBOPTIONS="caps:ctrl_modifier"
     - shell: dpkg-reconfigure keyboard-configuration -p high
       name: Set default layout
     - shell: setxkbmap -layout custom -option 'caps:ctrl_modifier'
