@@ -35,13 +35,6 @@
         dest: "~/.ssh/config"
         state: link
     - action: file
-      name: Create ssh env symlink
-      args:
-        force: yes
-        src: "~/config-files/ssh-environment"
-        dest: "~/.ssh/environment"
-        state: link
-    - action: file
       name: Create Terminator config symlink
       args:
         force: yes
