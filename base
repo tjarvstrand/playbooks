@@ -82,10 +82,17 @@
         - libghc-dbus-dev
 
         # BankID
-        # - ia32-libs 
+        # - ia32-libs
         - nspluginwrapper
 
         # tmux
         - libevent-dev
         - libncurses-dev
         # - autoreconf
+- name: Gnome config
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: no
+  tasks:
+    - shell: gsettings set org.gnome.settings-daemon.peripherals.touchpad disable-while-typing true
+      name: Disable touchpad while typing
