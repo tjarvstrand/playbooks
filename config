@@ -4,11 +4,11 @@
   connection: local
   gather_facts: no
   tasks:
-    # - action: git
-    #   name: Clone git repo
-    #   args:
-    #     repo: git@github.com:tjarvstrand/config-files.git
-    #     dest: "~/config-files"
+    - action: git
+      name: Clone git repo
+      args:
+        repo: git@github.com:tjarvstrand/config-files.git
+        dest: "~/config-files"
     - action: file
       name: Ensure directories
       args:
