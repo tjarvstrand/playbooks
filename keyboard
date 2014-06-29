@@ -45,3 +45,5 @@
       name: Add xkb rules to evdev.xml
     - script: scripts/add-evdev-lst /usr/share/X11/xkb/rules/evdev.lst
       name: Add xkb rules to evdev.lst
+    - shell: gsettings set org.freedesktop.ibus.general.hotkey triggers []
+      name: Disable ibus switcher triggers
