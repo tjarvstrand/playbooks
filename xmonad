@@ -14,8 +14,11 @@
         - libghc-dbus-dev
         - cabal-install
     - shell: cabal update
-    - shell: cabal install xmonad-extras
+    - shell: cabal install xmonad-extras xmonad-contrib
       name: Install xmonad-extras
+- name: Directories
+  hosts: all
+  tasks:
     - shell: xmonad --recompile
       name: Recompile xmonad
     - shell: gsettings set org.gnome.gnome-panel.layout toplevel-id-list "['top-panel-0']"
