@@ -1,6 +1,7 @@
 ---
 - name: Directories
   hosts: all
+  sudo: yes
   tasks:
     - action: apt
       name: Install packages

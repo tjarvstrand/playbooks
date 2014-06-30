@@ -1,6 +1,7 @@
 ---
 - name: Configure Keyboard
   hosts: all
+  sudo: yes
   tasks:
     - action: copy
       name: Backup files
@@ -37,12 +38,15 @@
         line: XKBOPTIONS="caps:ctrl_modifier"
     - shell: dpkg-reconfigure keyboard-configuration -p high
       name: Set default layout
-    - shell: setxkbmap -layout custom -option 'caps:ctrl_modifier'
-      name: Set current layout
     - script: scripts/add-evdev-xml /usr/share/X11/xkb/rules/evdev.xml
       name: Add xkb rules to evdev.xml
     - script: scripts/add-evdev-lst /usr/share/X11/xkb/rules/evdev.lst
       name: Add xkb rules to evdev.lst
+- name: Configure User Keyboard
+  hosts: all
+  tasks:
+    - shell: setxkbmap -layout custom -option 'caps:ctrl_modifier'
+      name: Set current layout
     - shell: gsettings set org.freedesktop.ibus.general.hotkey triggers []
       name: Disable ibus switcher triggers
 
