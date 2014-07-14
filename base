@@ -91,9 +91,11 @@
   tasks:
     - name: Xsession file
       action: copy
+      sudo: yes
       args:
         src: files/etc/X11/Xsession.d/56mysession
         dest: /etc/X11/Xsession.d/56mysession
+    - shell: . /etc/X11/Xsession.d/56mysession
 
 # Local Variables:
 # mode: yaml
