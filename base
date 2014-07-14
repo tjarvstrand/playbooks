@@ -86,6 +86,14 @@
   tasks:
     - shell: gsettings set org.gnome.settings-daemon.peripherals.touchpad disable-while-typing true
       name: Disable touchpad while typing
+- name: Xsession
+  hosts: all
+  tasks:
+    - name: Xsession file
+      action: copy
+      args:
+        src: files/etc/X11/Xsession.d/56mysession
+        dest: /etc/X11/Xsession.d/56mysession
 
 # Local Variables:
 # mode: yaml
