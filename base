@@ -31,7 +31,6 @@
         repo: "{{item}}"
       with_items:
         - ppa:ubuntu-wine/ppa
-        - deb http://repository.spotify.com        stable non-free
         - deb http://archive.canonical.com/ubuntu/ trusty partner
     - action: apt_key
       name: Add apt keys
@@ -52,7 +51,6 @@
         - gnome-do
         - network-manager-openvpn
         - skype
-        - spotify-client
         - synaptic
         - terminator
         - ttf-mscorefonts-installer
