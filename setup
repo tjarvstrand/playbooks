@@ -4,6 +4,7 @@
 - include: dropbox
 - include: config
 - include: xmonad
+- include: keepass
 
 # Local Variables:
 # mode: yaml

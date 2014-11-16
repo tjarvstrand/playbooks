@@ -9,6 +9,7 @@
         state: directory
       with_items:
         - ~/bin
+        - ~/src
         - ~/.config
     - action: file
       name: Delete
@@ -49,6 +50,7 @@
         - gimp
         - git
         - gnome-do
+        - mono-complete
         - network-manager-openvpn
         - skype
         - synaptic

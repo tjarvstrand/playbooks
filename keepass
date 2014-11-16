@@ -1,0 +1,29 @@
+---
+- name: KeePass
+  hosts: all
+  tasks:
+    - name: Create
+      action: file
+      args:
+        path:  ~/src/keepass
+        state: directory
+    - name: Fetch keepass
+      action: get_url
+      args:
+        url: http://sourceforge.net/projects/keepass/files/latest/download
+        dest: /tmp/keepass.zip
+    - name: Extract keepass
+      action: unarchive
+      args:
+        src: /tmp/keepass.zip
+        dest: ~/src/keepass
+    - name: keepass config symlink
+      action: file
+      args:
+        src: ~/config-files/KeePass.config.xml
+        dest: ~/src/keepass/KeePass.config.xml
+        state: link
+
+# Local Variables:
+# mode: yaml
+# End:
