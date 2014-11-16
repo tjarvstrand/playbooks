@@ -1,11 +1,14 @@
 ---
 - name: KeePass
   hosts: all
+  vars:
+    keepass_dir: ~/src/keepass
+    keepass_plugin_dir: "{{keepass_dir}}/plugins"
   tasks:
-    - name: Create
+    - name: Create keepass directory
       action: file
       args:
-        path:  ~/src/keepass
+        path:  "{{keepass_dir}}"
         state: directory
     - name: Fetch keepass
       action: get_url
@@ -16,13 +19,20 @@
       action: unarchive
       args:
         src: /tmp/keepass.zip
-        dest: ~/src/keepass
-    - name: keepass config symlink
+        dest: "{{keepass_dir}}"
+    - name: Create keepass plugin directory
       action: file
       args:
-        src: ~/config-files/KeePass.config.xml
-        dest: ~/src/keepass/KeePass.config.xml
-        state: link
+        path:  "{{keepass_plugin_dir}}"
+        state: directory
+    - name: Locate keefox rpc plugin file
+      shell: ls ~/.mozilla/firefox/*.default/extensions/keefox@chris.tomlinson/deps/KeePassRPC.plgx
+      register: keefox_rpc_plugin
+    - name: Copy keefox rpc plugin
+      action: copy
+      args:
+        src: "{{keefox_rpc_plugin.stdout}}"
+        dest: "{{keepass_plugin_dir}}"
 
 # Local Variables:
 # mode: yaml
