@@ -50,6 +50,7 @@
         - gimp
         - git
         - gnome-do
+        - gnupg
         - mono-complete
         - network-manager-openvpn
         - skype
