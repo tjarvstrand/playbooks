@@ -99,6 +99,31 @@
         src: files/etc/X11/Xsession.d/56mysession
         dest: /etc/X11/Xsession.d/56mysession
     - shell: . /etc/X11/Xsession.d/56mysession
+- name: XOrg config
+  hosts: all
+  tasks:
+    - name: XOrg config
+      action: copy
+      sudo: yes
+      args:
+        src: files/usr/share/X11/xorg.conf.d/100-compositing.conf
+        dest: /usr/share/X11/xorg.conf.d/100-compositing.conf
+- name: X config
+  hosts: all
+  tasks:
+    - name: X defaults
+      action: copy
+      args:
+        dest: ~/.Xdefaults
+        content: |
+          URxvt.depth: 32
+          URxvt*background: rgba:0000/0000/0000/cccc
+    - name: X session
+      action: copy
+      sudo: yes
+      args:
+        dest: /etc/X11/Xsession.d/100-xcompmgr
+        content: xcompmgr -cFf &
 
 # Local Variables:
 # mode: yaml
