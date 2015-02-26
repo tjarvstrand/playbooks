@@ -106,7 +106,7 @@
       action: copy
       sudo: yes
       args:
-        src: files/usr/share/X11/xorg.conf.d/100-compositing.conf
+        src: files/usr/share/X11/xorg.conf.d/60-compositing.conf
         dest: /usr/share/X11/xorg.conf.d/100-compositing.conf
 - name: X config
   hosts: all
@@ -122,7 +122,7 @@
       action: copy
       sudo: yes
       args:
-        dest: /etc/X11/Xsession.d/100-xcompmgr
+        dest: /etc/X11/Xsession.d/60-xcompmgr
         content: xcompmgr -cFf &
 
 # Local Variables:
