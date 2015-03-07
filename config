@@ -14,6 +14,9 @@
         state: directory
       with_items:
         - .config
+        - .config/transmission
+        - .emacs.d
+        - .lein
     - action: file
       name: Create symlinks
       args:
@@ -48,22 +51,12 @@
         dest: "~/.config/terminator"
         state: link
     - action: file
-      name: Create Transmission config dir
-      args:
-        dest: "~/.config/transmission"
-        state: directory
-    - action: file
       name: Create Transmission config symlink
       args:
         force: yes
         src: "~/config-files/transmission/settings.json"
         dest: "~/.config/transmission/settings.json"
         state: link
-    - action: file
-      name: Create Emacs config dir
-      args:
-        path: "~/.emacs.d"
-        state: directory
     - action: file
       name: Create Emacs lib symlink
       args:
@@ -83,6 +76,14 @@
         src: ~/config-files/.gconf/apps/gnome-do
         dest: ~/.gconf/apps/gnome-do
         state: link
+    - action: file
+      name: Create Leningen profiles symlink
+      args:
+        force: yes
+        src: ~/config-files/.lein/profiles.clj
+        dest: ~/.lein/profiles.clj
+        state: link
+
 
 # Local Variables:
 # mode: yaml
