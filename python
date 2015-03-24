@@ -1,0 +1,32 @@
+---
+- name: Configure virtualenv
+  hosts: all
+  tasks:
+    - name: Install pip
+      action: apt
+      args:
+        name: python-pip
+      sudo: yes
+    - name: Setup virtualenv
+      action: pip
+      args:
+        name: "{{item}}"
+        virtualenv: "{{lookup('ENV', 'HOME')}}/.virtualenv"
+      with_items:
+        - gnome-keyring
+        - boto
+        - PyYaml
+        - keyring
+        - requests
+        - Jinja2
+        - awscli
+    - shell: >
+        . {{lookup('ENV', 'HOME')}}/.virtualenv/bin/activate && python -c 'from requests import certs; print certs.where()'
+      register: ca_cert
+    - action: file
+      args:
+        state: link
+        force: true
+        dest: "{{ca_cert.stdout}}"
+        src: /usr/lib/ssl/certs/ca-certificates.crt
+        follow: false

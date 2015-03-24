@@ -1,5 +1,6 @@
 ---
 - include: base
+- include: python
 - include: keyboard
 - include: dropbox
 - include: config
