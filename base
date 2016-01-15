@@ -53,6 +53,7 @@
         - gnupg
         - mono-complete
         - network-manager-openvpn
+        - rng-tools
         - skype
         - synaptic
         - terminator
@@ -76,14 +77,11 @@
         - libwxgtk2.8-dev
         - freeglut3-dev
 
-        # BankID
-        # - ia32-libs
-        # - nspluginwrapper
-
         # tmux
         - libevent-dev
         - libncurses-dev
         # - autoreconf
+
 - name: Gnome config
   hosts: all
   tasks:
