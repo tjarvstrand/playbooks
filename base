@@ -9,7 +9,6 @@
         state: directory
       with_items:
         - ~/bin
-        - ~/src
         - ~/.config
     - action: file
       name: Delete
@@ -52,6 +51,7 @@
         - gnome-do
         - gnupg
         - mono-complete
+        - nautilus-dropbox
         - network-manager-openvpn
         - rng-tools
         - skype
@@ -63,8 +63,6 @@
         - wine
 
         # Emacs
-        - emacs23
-        - emacs23-el
         - emacs24
         - emacs24-el
         - emacs-goodies-el
@@ -82,11 +80,11 @@
         - libncurses-dev
         # - autoreconf
 
-- name: Gnome config
-  hosts: all
-  tasks:
-    - shell: gsettings set org.gnome.settings-daemon.peripherals.touchpad disable-while-typing true
-      name: Disable touchpad while typing
+#- name: Gnome config
+#  hosts: all
+#  tasks:
+#    - shell: gsettings set org.gnome.settings-daemon.peripherals.touchpad disable-while-typing true
+#      name: Disable touchpad while typing
 - name: Xsession
   hosts: all
   tasks:
@@ -104,24 +102,47 @@
       action: copy
       sudo: yes
       args:
-        src: files/usr/share/X11/xorg.conf.d/60-compositing.conf
+        src: files/usr/share/X11/xorg.conf.d/100-compositing.conf
         dest: /usr/share/X11/xorg.conf.d/100-compositing.conf
-- name: X config
-  hosts: all
-  tasks:
-    - name: X defaults
-      action: copy
+# - name: X config
+#   hosts: all
+#   tasks:
+#     - name: X defaults
+#       action: copy
+#       args:
+#         dest: ~/.Xdefaults
+#         content: |
+#           URxvt.depth: 32
+#           URxvt*background: rgba:0000/0000/0000/cccc
+#     - name: X session
+#       action: copy
+#       sudo: yes
+#       args:
+#         dest: /etc/X11/Xsession.d/60-xcompmgr
+#         content: xcompmgr -cFf &
+    - set_fact:
+        dropbox_link_dirs:
+          - doc
+          - src
+          - Desktop
+          - Documents
+          - Pictures
+    - action: file
+      name: Delete directories
       args:
-        dest: ~/.Xdefaults
-        content: |
-          URxvt.depth: 32
-          URxvt*background: rgba:0000/0000/0000/cccc
-    - name: X session
-      action: copy
-      sudo: yes
+        state: absent
+        dest: "~/{{item}}"
+      with_items:
+       - "{{dropbox_link_dirs}}"
+    - action: file
+      name: Create symlinks
       args:
-        dest: /etc/X11/Xsession.d/60-xcompmgr
-        content: xcompmgr -cFf &
+        force: yes
+        state: link
+        src: "~/Dropbox/{{item}}"
+        dest: "~/{{item}}"
+      with_items:
+       - "{{dropbox_link_dirs}}"
 
 # Local Variables:
 # mode: yaml

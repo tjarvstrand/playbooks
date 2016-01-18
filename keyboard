@@ -3,15 +3,15 @@
   hosts: all
   sudo: yes
   tasks:
-    - action: copy
-      name: Backup files
-      args:
-        backup: yes
-        src: "{{item}}"
-        dest: "{{item}}.bak"
-      with_items:
-        - /usr/share/X11/xkb/rules/evdev.lst
-        - /usr/share/X11/xkb/rules/evdev.xml
+    # - action: copy
+    #   name: Backup files
+    #   args:
+    #     backup: yes
+    #     src: "{{item}}"
+    #     dest: "{{item}}.bak"
+    #   with_items:
+    #     - /usr/share/X11/xkb/rules/evdev.lst
+    #     - /usr/share/X11/xkb/rules/evdev.xml
     - action: copy
       name: Copy keyboard layout file
       args:
@@ -23,25 +23,25 @@
       args:
         dest: /etc/default/keyboard
         regexp: ^XKBLAYOUT
-        line: XKBLAYOUT="custom"
+        line: XKBLAYOUT="se,us"
     - action: lineinfile
       name: Set default keyboard layout variant
       args:
         dest: /etc/default/keyboard
         regexp: ^XKBVARIANT
-        line: XKBVARIANT="us-sv-dvorak"
+        line: XKBVARIANT=",dvorak-alt-intl"
     - action: lineinfile
       name: Set default keyboard layout options
       args:
         dest: /etc/default/keyboard
         regexp: ^XKBOPTIONS
         line: XKBOPTIONS="caps:ctrl_modifier"
-    - shell: dpkg-reconfigure keyboard-configuration -p high
-      name: Set default layout
-    - script: scripts/add-evdev-xml /usr/share/X11/xkb/rules/evdev.xml
-      name: Add xkb rules to evdev.xml
-    - script: scripts/add-evdev-lst /usr/share/X11/xkb/rules/evdev.lst
-      name: Add xkb rules to evdev.lst
+    # - shell: dpkg-reconfigure keyboard-configuration -p high
+    #   name: Set default layout
+    # - script: scripts/add-evdev-xml /usr/share/X11/xkb/rules/evdev.xml
+    #   name: Add xkb rules to evdev.xml
+    # - script: scripts/add-evdev-lst /usr/share/X11/xkb/rules/evdev.lst
+    #   name: Add xkb rules to evdev.lst
 - name: Configure User Keyboard
   hosts: all
   tasks:

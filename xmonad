@@ -21,8 +21,6 @@
   tasks:
     - shell: xmonad --recompile
       name: Recompile xmonad
-    - shell: gsettings set org.gnome.gnome-panel.layout toplevel-id-list "['top-panel-0']"
-      name: Remove all gnome panels except top
 
 # Local Variables:
 # mode: yaml

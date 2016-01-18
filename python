@@ -7,6 +7,16 @@
       args:
         name: python-pip
       sudo: yes
+    - name: Install virtualenv
+      action: apt
+      args:
+        name: virtualenv
+      sudo: yes
+    - name: Install libffi
+      action: apt
+      args:
+        name: libffi-dev
+      sudo: yes
     - name: Setup virtualenv
       action: pip
       args:
