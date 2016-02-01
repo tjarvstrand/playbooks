@@ -1,0 +1,39 @@
+---
+- name: qtile
+  hosts: all
+  sudo: yes
+  tasks:
+    - action: apt
+      args:
+        name: "{{item}}"
+      with_items:
+        - libxcb-render0-dev
+        - libffi-dev
+        - libpangocairo-1.0-0
+        - python-dbus
+        - libiw-dev
+    - action: pip
+      args:
+        name: "{{item}}"
+      with_items:
+        - xcffib
+        - cairocffi
+        - trollius
+        - iwlib
+        - qtile
+    - action: copy
+      args:
+        dest: /usr/share/xsessions/qtile.desktop
+        content: |
+          [Desktop Entry]
+          Encoding=UTF-8
+          Name=qtile
+          Comment=A full-featured, pure-Python tiling window manager
+          TryExec=qtile
+          Exec=qtile
+          Type=Application
+
+
+# Local Variables:
+# mode: yaml
+# End:
