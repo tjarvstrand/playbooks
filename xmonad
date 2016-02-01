@@ -1,7 +1,6 @@
 ---
-- name: Directories
+- name: Install xmonad
   hosts: all
-  sudo: yes
   tasks:
     - action: apt
       name: Install packages
@@ -13,14 +12,21 @@
         - xmonad
         - libghc-dbus-dev
         - cabal-install
+    sudo: yes
     - shell: cabal update
     - shell: cabal install xmonad-extras xmonad-contrib
       name: Install xmonad-extras
-- name: Directories
-  hosts: all
-  tasks:
     - shell: xmonad --recompile
       name: Recompile xmonad
+
+    - shell: "ls -1d ~/.mozilla/firefox/*.default"
+      register: user_js_dir
+    - action: copy
+      name: Firefox ignore fullscreen widgets
+      args:
+        dest: "{{user_js_dir.stdout}}/user.js"
+        content: |
+          user_pref("full-screen-api.ignore-widgets","true");
 
 # Local Variables:
 # mode: yaml

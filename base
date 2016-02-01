@@ -31,28 +31,38 @@
         repo: "{{item}}"
       with_items:
         - ppa:ubuntu-wine/ppa
-        - deb http://archive.canonical.com/ubuntu/ trusty partner
+        - "deb http://repository.spotify.com stable non-free"
     - action: apt_key
       name: Add apt keys
       args:
         keyserver: hkp://keyserver.ubuntu.com:80
         id: 94558F59
+    - action: apt_key
+      name: Add Spotify apt key
+      args:
+        keyserver: hkp://keyserver.ubuntu.com:80
+        id: BBEBDCB318AD50EC6865090613B00F1FD2C19886
+    - action: apt
+      args:
+        update_cache: yes
     - action: apt
       name: Install packages
       args:
         name: "{{item}}"
-        force: yes
       with_items:
         - adobe-flashplugin
-        - curl
         - build-essential
+        - curl
+        - docker.io
         - gimp
         - git
         - gnome-do
         - gnupg
+        - lsb-core
         - mono-complete
         - nautilus-dropbox
         - network-manager-openvpn
+        - python-dev
         - rng-tools
         - skype
         - synaptic
@@ -86,41 +96,32 @@
 #  tasks:
 #    - shell: gsettings set org.gnome.settings-daemon.peripherals.touchpad disable-while-typing true
 #      name: Disable touchpad while typing
-- name: Xsession
+- name: Xsession - enable compositing in Xmonad
   hosts: all
   tasks:
     - name: Xsession file
       action: copy
       sudo: yes
       args:
-        src: files/etc/X11/Xsession.d/56mysession
         dest: /etc/X11/Xsession.d/56mysession
+        content: |
+          xcompmgr -cFf -O 0.15 -I 0.15 &
+          xinput set-prop "SynPS/2 Synaptics TouchPad" "Synaptics Finger" 45 50 10
+          setxkbmap -option ctrl:nocaps
     - shell: . /etc/X11/Xsession.d/56mysession
-- name: XOrg config
-  hosts: all
-  tasks:
     - name: XOrg config
       action: copy
       sudo: yes
       args:
         src: files/usr/share/X11/xorg.conf.d/100-compositing.conf
         dest: /usr/share/X11/xorg.conf.d/100-compositing.conf
-# - name: X config
-#   hosts: all
-#   tasks:
-#     - name: X defaults
-#       action: copy
-#       args:
-#         dest: ~/.Xdefaults
-#         content: |
-#           URxvt.depth: 32
-#           URxvt*background: rgba:0000/0000/0000/cccc
-#     - name: X session
-#       action: copy
-#       sudo: yes
-#       args:
-#         dest: /etc/X11/Xsession.d/60-xcompmgr
-#         content: xcompmgr -cFf &
+    - name: X defaults
+      action: copy
+      args:
+        dest: ~/.Xdefaults
+        content: |
+          URxvt.depth: 32
+          URxvt*background: rgba:0000/0000/0000/cccc
     - set_fact:
         dropbox_link_dirs:
           - doc

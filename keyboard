@@ -23,13 +23,13 @@
       args:
         dest: /etc/default/keyboard
         regexp: ^XKBLAYOUT
-        line: XKBLAYOUT="se,custom"
+        line: XKBLAYOUT="custom,se"
     - action: lineinfile
       name: Set default keyboard layout variant
       args:
         dest: /etc/default/keyboard
         regexp: ^XKBVARIANT
-        line: XKBVARIANT=",us-sv-dvorak"
+        line: XKBVARIANT="us-sv-dvorak,"
     - action: lineinfile
       name: Set default keyboard layout options
       args:
@@ -42,6 +42,19 @@
       name: Add xkb rules to evdev.xml
     - script: scripts/add-evdev-lst /usr/share/X11/xkb/rules/evdev.lst
       name: Add xkb rules to evdev.lst
+    - action: copy
+      name: Create xorg.conf
+      args:
+        dest: /etc/X11/xorg.conf
+        content: >-
+          Section "InputClass"
+              Identifier "evdev keyboard catchall"
+              Option "XkbLayout" "custom"
+              Option "XkbVariant" "us-sv-dvorak"
+              MatchIsKeyboard "on"
+              MatchDevicePath "/dev/input/event*"
+              Driver "evdev"
+          EndSection
 - name: Configure User Keyboard
   hosts: all
   tasks:
