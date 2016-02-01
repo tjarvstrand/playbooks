@@ -12,6 +12,7 @@
         - libpangocairo-1.0-0
         - python-dbus
         - libiw-dev
+        - aptitude # for update checking
     - action: pip
       args:
         name: "{{item}}"
@@ -21,6 +22,7 @@
         - trollius
         - iwlib
         - qtile
+        - sh
     - action: copy
       args:
         dest: /usr/share/xsessions/qtile.desktop
