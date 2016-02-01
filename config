@@ -7,6 +7,7 @@
       args:
         repo: git@github.com:tjarvstrand/config-files.git
         dest: "~/config-files"
+      ignore_errors: yes
     - action: file
       name: Ensure directories
       args:
@@ -44,12 +45,15 @@
         dest: "~/.ssh/config"
         state: link
     - action: file
-      name: Create Terminator config symlink
+      name: Create .config symlinks
       args:
         force: yes
-        src: "~/config-files/terminator"
-        dest: "~/.config/terminator"
+        src: "~/config-files/{{item}}"
+        dest: "~/.config/{{item}}"
         state: link
+      with_items:
+        - terminator
+        - qtile
     - action: file
       name: Create Transmission config symlink
       args:
