@@ -1,0 +1,149 @@
+---
+- name: X
+  hosts: all
+  tasks:
+    - name: Xsession file
+      action: copy
+      sudo: yes
+      args:
+        dest: /etc/X11/Xsession.d/56mysession
+        content: |
+          xcompmgr -Ff -O 0.15 -I 0.15 &
+          xinput set-prop "SynPS/2 Synaptics TouchPad" "Synaptics Finger" 45 50 10
+          setxkbmap -option ctrl:nocaps
+          synclient VertScrollDelta=-111
+          synclient HorizScrollDelta=-111
+    - shell: . /etc/X11/Xsession.d/56mysession
+    # - name: XOrg config
+    #   action: copy
+    #   sudo: yes
+    #   args:
+    #     src: files/usr/share/X11/xorg.conf.d/100-compositing.conf
+    #     dest: /usr/share/X11/xorg.conf.d/100-compositing.conf
+    - name: X defaults
+      action: copy
+      args:
+        dest: ~/.Xdefaults
+        content: |
+          URxvt.depth: 32
+          URxvt*background: rgba:0000/0000/0000/cccc
+    - action: copy
+      sudo: yes
+      args:
+        dest: /etc/udev/rules.d/70-detect-screen.rules
+        content: |
+          KERNEL=="card0", SUBSYSTEM=="drm", RUN+="/home/tjarvstrand/bin/detect_screens"
+    - action: service
+      sudo: yes
+      args:
+        name: udev
+        state: restarted
+- name: qtile
+  hosts: all
+  sudo: yes
+  tasks:
+    - action: apt
+      args:
+        name: "{{item}}"
+      with_items:
+        - libxcb-render0-dev
+        - libffi-dev
+        - libpangocairo-1.0-0
+        - python-dbus
+        - libiw-dev
+        - aptitude # for update checking
+    - action: pip
+      args:
+        name: "{{item}}"
+      with_items:
+        - xcffib
+        - cairocffi
+        - trollius
+        - iwlib
+        - qtile
+        - sh
+    - action: copy
+      args:
+        dest: /usr/share/xsessions/qtile.desktop
+        content: |
+          [Desktop Entry]
+          Encoding=UTF-8
+          Name=qtile
+          Comment=A full-featured, pure-Python tiling window manager
+          TryExec=qtile
+          Exec=qtile
+          Type=Application
+- name: qtile hacking
+  hosts: all
+  tasks:
+    - action: apt
+      sudo: yes
+      args:
+        name: "{{item}}"
+      with_items:
+        - xserver-xephyr
+      action: pip
+      args:
+        name: "{{item}}"
+        virtualenv: "{{lookup('ENV', 'HOME')}}/.virtualenv"
+      with_items:
+        - cairocffi
+        - iwlib
+        - nose
+        - sh
+        - trollius
+        - xffib
+- name: misc packages
+  hosts: all
+  tasks:
+    - action: apt_repository
+      name: Add apt repositories
+      args:
+        repo: "{{item}}"
+      with_items:
+        - ppa:ubuntu-wine/ppa
+        - "deb http://repository.spotify.com stable non-free"
+    - action: apt_key
+      name: Add Spotify apt key
+      args:
+        keyserver: hkp://keyserver.ubuntu.com:80
+        id: BBEBDCB318AD50EC6865090613B00F1FD2C19886
+    - action: apt
+      args:
+        #- adobe-flashplugin
+	- lightdm
+        - nautilus-dropbox
+        - skype
+        - synaptic
+        - terminator
+        - ttf-mscorefonts-installer
+	- vlc
+	- wine
+	- xcompmgr
+    - set_fact:
+        dropbox_link_dirs:
+          - doc
+          - src
+          - Desktop
+          - Documents
+          - Pictures
+    - action: file
+      name: Delete directories
+      args:
+        state: absent
+        dest: "~/{{item}}"
+      with_items:
+       - "{{dropbox_link_dirs}}"
+    - action: file
+      name: Create symlinks
+      args:
+        force: yes
+        state: link
+        src: "~/Dropbox/{{item}}"
+        dest: "~/{{item}}"
+      with_items:
+       - "{{dropbox_link_dirs}}"
+
+# Local Variables:
+# mode: yaml
+# End:
