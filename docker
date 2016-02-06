@@ -24,7 +24,7 @@
     - action: apt
       name: Install packages
       args:
-        name: docker.io
+        name: docker-engine
     - action: lineinfile
       name: Add Klarna dns to docker daemon
       args:

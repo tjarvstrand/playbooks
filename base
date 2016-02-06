@@ -53,7 +53,6 @@
         - adobe-flashplugin
         - build-essential
         - curl
-        - docker.io
         - gimp
         - git
         - gnupg
@@ -63,6 +62,7 @@
         - network-manager-openvpn
         - python-dev
         - rng-tools
+        - ruby
         - skype
         - synaptic
         - terminator
@@ -85,7 +85,7 @@
         - libwxgtk2.8-dev
         - freeglut3-dev
 
-- name: Xsession - enable compositing in Xmonad
+- name: X
   hosts: all
   tasks:
     - name: Xsession file
@@ -94,18 +94,18 @@
       args:
         dest: /etc/X11/Xsession.d/56mysession
         content: |
-          xcompmgr -cFf -O 0.15 -I 0.15 &
+          xcompmgr -Ff -O 0.15 -I 0.15 &
           xinput set-prop "SynPS/2 Synaptics TouchPad" "Synaptics Finger" 45 50 10
           setxkbmap -option ctrl:nocaps
           synclient VertScrollDelta=-111
           synclient HorizScrollDelta=-111
     - shell: . /etc/X11/Xsession.d/56mysession
-    - name: XOrg config
-      action: copy
-      sudo: yes
-      args:
-        src: files/usr/share/X11/xorg.conf.d/100-compositing.conf
-        dest: /usr/share/X11/xorg.conf.d/100-compositing.conf
+    # - name: XOrg config
+    #   action: copy
+    #   sudo: yes
+    #   args:
+    #     src: files/usr/share/X11/xorg.conf.d/100-compositing.conf
+    #     dest: /usr/share/X11/xorg.conf.d/100-compositing.conf
     - name: X defaults
       action: copy
       args:
@@ -113,6 +113,17 @@
         content: |
           URxvt.depth: 32
           URxvt*background: rgba:0000/0000/0000/cccc
+    - action: copy
+      sudo: yes
+      args:
+        dest: /etc/udev/rules.d/70-detect-screen.rules
+        content: |
+          KERNEL=="card0", SUBSYSTEM=="drm", RUN+="/home/tjarvstrand/bin/detect_screens"
+    - action: service
+      sudo: yes
+      args:
+        name: udev
+        state: restarted
     - set_fact:
         dropbox_link_dirs:
           - doc

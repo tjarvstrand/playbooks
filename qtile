@@ -34,6 +34,26 @@
           TryExec=qtile
           Exec=qtile
           Type=Application
+- name: qtile hacking
+  hosts: all
+  tasks:
+    - action: apt
+      sudo: yes
+      args:
+        name: "{{item}}"
+      with_items:
+        - xserver-xephyr
+      action: pip
+      args:
+        name: "{{item}}"
+        virtualenv: "{{lookup('ENV', 'HOME')}}/.virtualenv"
+      with_items:
+        - cairocffi
+        - iwlib
+        - nose
+        - sh
+        - trollius
+        - xffib
 
 
 # Local Variables:
