@@ -25,23 +25,21 @@
   hosts: all
   sudo: yes
   tasks:
-    - action: apt_repository
-      name: Add apt repositories
+    - action: apt
+      name: Install lsb-core
       args:
-        repo: "{{item}}"
-      with_items:
-        - ppa:ubuntu-wine/ppa
-        - "deb http://repository.spotify.com stable non-free"
+        name: lsb-core
+    - shell: lsb_release -a | grep Codename | cut -f 2
+      register: ubuntu_codename
     - action: apt_key
       name: Add apt keys
       args:
         keyserver: hkp://keyserver.ubuntu.com:80
         id: 94558F59
-    - action: apt_key
-      name: Add Spotify apt key
-      args:
-        keyserver: hkp://keyserver.ubuntu.com:80
-        id: BBEBDCB318AD50EC6865090613B00F1FD2C19886
+    # - name: Add ubuntu universe
+    #   action: apt_repository
+    #   args:
+    #     repo: "deb http://archive.ubuntu.com/ubuntu {{ubuntu_codename.stdout}} main universe restricted multiverse"
     - action: apt
       args:
         update_cache: yes
@@ -50,27 +48,22 @@
       args:
         name: "{{item}}"
       with_items:
-        - adobe-flashplugin
+        - aptitude
+        - console-data
         - build-essential
         - curl
         - gimp
         - git
         - gnupg
-        - lsb-core
         - mono-complete
         - nautilus-dropbox
+        - network-manager
         - network-manager-openvpn
         - python-dev
+        - python-software-properties # apt-add-repostory
         - rng-tools
         - ruby
-        - skype
-        - synaptic
-        - terminator
-        - ttf-mscorefonts-installer
         - tree
-        - vlc
-        - wine
-        - xcompmgr # For compositing with Xmonad
 
         # Emacs
         - emacs24
@@ -84,69 +77,22 @@
         # erlang wx support
         - libwxgtk2.8-dev
         - freeglut3-dev
-
-- name: X
-  hosts: all
-  tasks:
-    - name: Xsession file
-      action: copy
-      sudo: yes
+    - action: file
       args:
-        dest: /etc/X11/Xsession.d/56mysession
-        content: |
-          xcompmgr -Ff -O 0.15 -I 0.15 &
-          xinput set-prop "SynPS/2 Synaptics TouchPad" "Synaptics Finger" 45 50 10
-          setxkbmap -option ctrl:nocaps
-          synclient VertScrollDelta=-111
-          synclient HorizScrollDelta=-111
-    - shell: . /etc/X11/Xsession.d/56mysession
-    # - name: XOrg config
-    #   action: copy
-    #   sudo: yes
-    #   args:
-    #     src: files/usr/share/X11/xorg.conf.d/100-compositing.conf
-    #     dest: /usr/share/X11/xorg.conf.d/100-compositing.conf
-    - name: X defaults
-      action: copy
-      args:
-        dest: ~/.Xdefaults
-        content: |
-          URxvt.depth: 32
-          URxvt*background: rgba:0000/0000/0000/cccc
+        state: directory
+        dest: /usr/local/share/kbd/keymaps
     - action: copy
-      sudo: yes
       args:
-        dest: /etc/udev/rules.d/70-detect-screen.rules
+        dest: /usr/local/share/kbd/keymaps/caps_control.map
         content: |
-          KERNEL=="card0", SUBSYSTEM=="drm", RUN+="/home/tjarvstrand/bin/detect_screens"
-    - action: service
-      sudo: yes
-      args:
-        name: udev
-        state: restarted
-    - set_fact:
-        dropbox_link_dirs:
-          - doc
-          - src
-          - Desktop
-          - Documents
-          - Pictures
-    - action: file
-      name: Delete directories
-      args:
-        state: absent
-        dest: "~/{{item}}"
-      with_items:
-       - "{{dropbox_link_dirs}}"
-    - action: file
-      name: Create symlinks
-      args:
-        force: yes
-        state: link
-        src: "~/Dropbox/{{item}}"
-        dest: "~/{{item}}"
-      with_items:
-       - "{{dropbox_link_dirs}}"
+          keycode 58 = Control
+    - shell: git config --global user.email "tjarvstrand@gmail.com"
+      sudo: no
+    # TODO set correct last name
+    - shell: git config --global user.name "Thomas Jarvstrand"
+      sudo: no
+    
+
 
 # Local Variables:
 # mode: yaml
