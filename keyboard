@@ -51,6 +51,7 @@
               Identifier "evdev keyboard catchall"
               Option "XkbLayout" "custom"
               Option "XkbVariant" "us-sv-dvorak"
+              Option "kdbOption" "caps:ctrl_modifier"
               MatchIsKeyboard "on"
               MatchDevicePath "/dev/input/event*"
               Driver "evdev"
