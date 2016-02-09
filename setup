@@ -2,10 +2,9 @@
 - include: base
 - include: python
 - include: keyboard
-- include: dropbox
+- include: desktop
 - include: config
-- include: xmonad
-- include: keepass
+#- docker
 
 # Local Variables:
 # mode: yaml

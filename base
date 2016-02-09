@@ -21,6 +21,12 @@
         - ~/Templates
         - ~/Videos
         - ~/examples.desktop
+    - action: git
+      name: Clone bin repo
+      args:
+        repo: git@github.com:tjarvstrand/bin.git
+        dest: "~/bin"
+      ignore_errors: yes
 - name: Install packages
   hosts: all
   sudo: yes
@@ -36,6 +42,10 @@
       args:
         keyserver: hkp://keyserver.ubuntu.com:80
         id: 94558F59
+    - name: Add ubuntu partner
+      action: apt_repository
+      args:
+        repo: "deb http://archive.canonical.com/ubuntu {{ubuntu_codename.stdout}} partner"
     # - name: Add ubuntu universe
     #   action: apt_repository
     #   args:
@@ -64,6 +74,9 @@
         - ruby
         - tar
         - tree
+        - xcompmgr
+        - xinput
+        - wmname
 
         # Emacs
         - emacs24

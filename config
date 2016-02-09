@@ -70,9 +70,15 @@
         state: link
     - action: file
       name: Delete local gnome-do config
+      ignore_errors: yes
       args:
         state: absent
         path: ~/.gconf/apps/gnome-do
+    - action: file
+      name: Create gnome-do config directory
+      args:
+        dest: ~/.gconf/apps/gnome-do
+        state: directory
     - action: file
       name: Create gnome-do config symlink
       args:
