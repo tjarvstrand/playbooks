@@ -101,3 +101,19 @@
         line: "keycode 58 = Control"
         dest: /etc/console-setup/remap.inc
     - shell: dpkg-reconfigure -f noninteractive keyboard-configuration
+- name: Networking
+  hosts: all
+  sudo: yes
+  tasks:
+    - name: Disable auto up of ethernet interfaces
+      action: replace
+      args:
+        dest: /etc/network/interfaces
+        backup: yes
+        regexp: "(#*)?(.*?(eth[0-9]|eno[0-9]).*?\n)"
+        replace: '#\2'
+
+
+# Local Variables:
+# mode: yaml
+# End:
