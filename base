@@ -49,12 +49,11 @@
         name: "{{item}}"
       with_items:
         - aptitude
-        - console-data
         - build-essential
         - curl
-        - gimp
         - git
         - gnupg
+        - gzip
         - mono-complete
         - nautilus-dropbox
         - network-manager
@@ -63,6 +62,7 @@
         - python-software-properties # apt-add-repostory
         - rng-tools
         - ruby
+        - tar
         - tree
 
         # Emacs
@@ -77,23 +77,14 @@
         # erlang wx support
         - libwxgtk2.8-dev
         - freeglut3-dev
-    - action: file
-      args:
-        state: directory
-        dest: /usr/local/share/kbd/keymaps
-    - action: copy
-      args:
-        dest: /usr/local/share/kbd/keymaps/caps_control.map
-        content: |
-          keycode 58 = Control
     - shell: git config --global user.email "tjarvstrand@gmail.com"
       sudo: no
-    # TODO set correct last name
-    - shell: git config --global user.name "Thomas Jarvstrand"
+    - shell: git config --global user.name "Thomas Järvstrand"
       sudo: no
-    
-
-
-# Local Variables:
-# mode: yaml
-# End:
+    - shell: localectl set-keymap dvorak
+    - action: lineinfile
+      args:
+        regexp: "[# ]*keycode 58 ="
+        line: "keycode 58 = Control"
+        dest: /etc/console-setup/remap.inc
+    - shell: dpkg-reconfigure -f noninteractive keyboard-configuration

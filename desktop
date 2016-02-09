@@ -111,6 +111,7 @@
     - action: apt
       args:
         #- adobe-flashplugin
+        - gimp
 	- lightdm
         - nautilus-dropbox
         - skype
