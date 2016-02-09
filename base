@@ -112,6 +112,33 @@
         backup: yes
         regexp: "(#*)?(.*?(eth[0-9]|eno[0-9]).*?\n)"
         replace: '#\2'
+    - name: Create script to auto enable/disable wifi
+      action: copy
+      args:
+        dest: /etc/NetworkManager/dispatcher.d/99-wifi-disable-on-ethernet
+        mode: u=rwx,g=r,o=r
+        content: |
+          #!/bin/sh
+          myname=${0##*/}
+          log() { logger -p user.info -t "${myname}[$$]" "$*"; }
+          IFACE=$1
+          ACTION=$2
+
+          case ${IFACE} in
+              eth*|eno*|usb*)
+                  case ${ACTION} in
+                      up)
+                          log "disabling wifi radio"
+                          nmcli radio wifi off
+                      ;;
+                      down)
+                          log "enabling wifi radio"
+                          nmcli radio wifi on
+                      ;;
+                  esac
+              ;;
+          esac
+
 
 
 # Local Variables:
