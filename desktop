@@ -50,12 +50,14 @@
       args:
         name: "{{item}}"
       with_items:
-        - libxcb-render0-dev
+        - aptitude # for update checking
         - libffi-dev
+        - libiw-dev
+        - libxcb-cursor0
+        - libxcb-cursor-dev
+        - libxcb-render0-dev
         - libpangocairo-1.0-0
         - python-dbus
-        - libiw-dev
-        - aptitude # for update checking
     - action: pip
       args:
         name: "{{item}}"
