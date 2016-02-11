@@ -64,6 +64,7 @@
         - git
         - gnupg
         - gzip
+        - markdown
         - mono-complete
         - nautilus-dropbox
         - network-manager
