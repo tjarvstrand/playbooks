@@ -75,6 +75,7 @@
         - ruby
         - tar
         - tree
+        - unrar
         - xcompmgr
         - xinput
         - wmname

@@ -52,6 +52,8 @@
         dest: "~/.config/{{item}}"
         state: link
       with_items:
+        - gtk-2.0
+        - gtk-3.0
         - terminator
         - qtile
     - action: file
