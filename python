@@ -21,6 +21,7 @@
       action: pip
       args:
         name: "{{item}}"
+        virtualenv_site_packages: yes
         virtualenv: "{{lookup('ENV', 'HOME')}}/.virtualenv"
       with_items:
         - boto
