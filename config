@@ -8,6 +8,12 @@
         repo: git@github.com:tjarvstrand/config-files.git
         dest: "~/config-files"
       ignore_errors: yes
+    - shell: ls -d *.default
+      args:
+        chdir: ~/config-files/.mozilla/firefox
+      register: firefox_default_profile_result
+    - set_fact:
+        firefox_default_profile: "{{firefox_default_profile_result.stdout}}"
     - action: file
       name: Ensure directories
       args:
@@ -18,6 +24,9 @@
         - .config/transmission
         - .emacs.d
         - .lein
+        - .mozilla
+        - .mozilla/firefox
+        - .mozilla/firefox/{{firefox_default_profile}}
     - action: file
       name: Create symlinks
       args:
@@ -95,6 +104,16 @@
         src: ~/config-files/.lein/profiles.clj
         dest: ~/.lein/profiles.clj
         state: link
+    - action: file
+      name: Create Firefox config file symlinks
+      args:
+        force: yes
+        src: "~/config-files/.mozilla/firefox/{{item}}"
+        dest: "~/.mozilla/firefox/{{item}}"
+        state: link
+      with_items:
+        - profiles.ini
+        - "{{firefox_default_profile}}/userChrome.css"
 
 
 # Local Variables:
