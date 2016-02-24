@@ -110,6 +110,8 @@
         - sh
         - trollius
         - xcffib
+        - python-mpd2
+        - google-api-python-client
 - name: misc packages
   hosts: all
   sudo: yes
@@ -131,12 +133,20 @@
         name: "{{item}}"
       with_items:
 
+        # Libraries
+        - libgtk-3-dev # For building themes
+
+        #
+        - xfce4-notifyd
+        - xfce4-power-manager
+        - xfce4-volumed
+
         # System tools
-        - dmenu
         - lightdm
         - light-locker
         - nautilus-dropbox
         - pavucontrol
+        - suckless-tools
         - synaptic
         - terminator
 
@@ -153,11 +163,34 @@
         #- adobe-flashpluginx
 
         # UI
+        - numix-gtk-theme # for xfce4-notifyd
         - ttf-mscorefonts-installer
         - ttf-ubuntu-font-family
         - xubuntu-icon-theme
     - shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Ambience dark"'
       sudo: no
+
+- name: dmenu
+  hosts: all
+  tasks:
+    - action: apt
+      args:
+        name: "{{item}}"
+      with_items:
+        - libxft-dev
+        - libxft2
+        - libxinerama-dev
+    - action: git
+      args:
+        repo: http://git.suckless.org/dmenu
+        dest: ~/src
+      ignore_errors: yes
+    - shell: "make"
+      args:
+        chdir: "~/src/dmenu"
+    - shell: "sudo make install"
+      args:
+        chdir: "~/src/dmenu"
 
 - name: Dropbox linking
   hosts: all
