@@ -1,117 +1,4 @@
 ---
-- name: X
-  hosts: all
-  tasks:
-    - action: file
-      sudo: yes
-      args:
-        state: directory
-        dest: /etc/X11/Xsession.d
-    - name: Xsession file
-      action: copy
-      sudo: yes
-      args:
-        dest: /etc/X11/Xsession.d/56mysession
-        content: |
-          syndaemon -d -i 1.0 -R -K -t -p ~/.syndaemon.pid
-          xcompmgr -Ff -O 0.15 -I 0.15 &
-          xinput set-prop "SynPS/2 Synaptics TouchPad" "Synaptics Finger" 45 50 10
-          setxkbmap -option ctrl:nocaps
-          synclient VertScrollDelta=-111
-          synclient HorizScrollDelta=-111
-    # - name: XOrg config
-    #   action: copy
-    #   sudo: yes
-    #   args:
-    #     src: files/usr/share/X11/xorg.conf.d/100-compositing.conf
-    #     dest: /usr/share/X11/xorg.conf.d/100-compositing.conf
-    - name: X defaults
-      action: copy
-      args:
-        dest: ~/.Xdefaults
-        content: |
-          URxvt.depth: 32
-          URxvt*background: rgba:0000/0000/0000/cccc
-    - action: copy
-      sudo: yes
-      args:
-        dest: /etc/udev/rules.d/70-detect-screen.rules
-        content: |
-          KERNEL=="card0", SUBSYSTEM=="drm", RUN+="/home/tjarvstrand/bin/detect_screens"
-    - action: service
-      sudo: yes
-      args:
-        name: udev
-        state: restarted
-- name: qtile
-  hosts: all
-  sudo: yes
-  tasks:
-    - action: apt
-      args:
-        name: "{{item}}"
-      with_items:
-        - aptitude # for update checking
-        - libffi-dev
-        - libiw-dev
-        - libxcb-cursor0
-        - libxcb-cursor-dev
-        - libxcb-render0-dev
-        - libpangocairo-1.0-0
-        - python-dbus
-    - action: pip
-      args:
-        name: "{{item}}"
-      with_items:
-        - xcffib
-        - cairocffi
-        - trollius
-        - iwlib
-        - qtile
-        - sh
-    - action: file
-      args:
-        state: directory
-        dest: /usr/share/xsessions
-    - action: copy
-      args:
-        dest: /usr/share/xsessions/qtile.desktop
-        content: |
-          [Desktop Entry]
-          Encoding=UTF-8
-          Name=qtile
-          Comment=A full-featured, pure-Python tiling window manager
-          TryExec=qtile
-          Exec=qtile
-          Type=Application
-    - action: copy
-      args:
-        dest: /usr/share/lightdm/lightdm.conf.d/60-qtile.conf
-        content: |
-          [Seat:*]
-          user-session=qtile
-- name: qtile hacking
-  hosts: all
-  tasks:
-    - action: apt
-      sudo: yes
-      args:
-        name: "{{item}}"
-      with_items:
-        - xserver-xephyr
-      action: pip
-      args:
-        name: "{{item}}"
-        virtualenv: "{{lookup('ENV', 'HOME')}}/.virtualenv"
-      with_items:
-        - cairocffi
-        - iwlib
-        - nose
-        - sh
-        - trollius
-        - xcffib
-        - python-mpd2
-        - google-api-python-client
 - name: misc packages
   hosts: all
   sudo: yes
@@ -172,8 +59,122 @@
         - ttf-mscorefonts-installer
         - ttf-ubuntu-font-family
         - xubuntu-icon-theme
-    - shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Ambience dark"'
-      sudo: no
+
+- name: X
+  hosts: all
+  tasks:
+    - action: file
+      sudo: yes
+      args:
+        state: directory
+        dest: /etc/X11/Xsession.d
+    - name: Xsession file
+      action: copy
+      sudo: yes
+      args:
+        dest: /etc/X11/Xsession.d/56mysession
+        content: |
+          syndaemon -d -i 1.0 -R -K -t -p ~/.syndaemon.pid
+          xcompmgr -Ff -O 0.15 -I 0.15 &
+          xinput set-prop "SynPS/2 Synaptics TouchPad" "Synaptics Finger" 45 50 10
+          setxkbmap -option ctrl:nocaps
+          synclient VertScrollDelta=-111
+          synclient HorizScrollDelta=-111
+    # - name: XOrg config
+    #   action: copy
+    #   sudo: yes
+    #   args:
+    #     src: files/usr/share/X11/xorg.conf.d/100-compositing.conf
+    #     dest: /usr/share/X11/xorg.conf.d/100-compositing.conf
+    - name: X defaults
+      action: copy
+      args:
+        dest: ~/.Xdefaults
+        content: |
+          URxvt.depth: 32
+          URxvt*background: rgba:0000/0000/0000/cccc
+    - action: copy
+      sudo: yes
+      args:
+        dest: /etc/udev/rules.d/70-detect-screen.rules
+        content: |
+          KERNEL=="card0", SUBSYSTEM=="drm", RUN+="/home/tjarvstrand/bin/detect_screens"
+    - action: service
+      sudo: yes
+      args:
+        name: udev
+        state: restarted
+
+- name: qtile
+  hosts: all
+  sudo: yes
+  tasks:
+    - action: apt
+      args:
+        name: "{{item}}"
+      with_items:
+        - aptitude # for update checking
+        - libffi-dev
+        - libiw-dev
+        - libxcb-cursor0
+        - libxcb-cursor-dev
+        - libxcb-render0-dev
+        - libpangocairo-1.0-0
+        - python-dbus
+    - action: pip
+      args:
+        name: "{{item}}"
+      with_items:
+        - xcffib
+        - cairocffi
+        - trollius
+        - iwlib
+        - qtile
+        - sh
+    - action: file
+      args:
+        state: directory
+        dest: /usr/share/xsessions
+    - action: copy
+      args:
+        dest: /usr/share/xsessions/qtile.desktop
+        content: |
+          [Desktop Entry]
+          Encoding=UTF-8
+          Name=qtile
+          Comment=A full-featured, pure-Python tiling window manager
+          TryExec=qtile
+          Exec=qtile
+          Type=Application
+    - action: copy
+      args:
+        dest: /usr/share/lightdm/lightdm.conf.d/60-qtile.conf
+        content: |
+          [Seat:*]
+          user-session=qtile
+
+- name: qtile hacking
+  hosts: all
+  tasks:
+    - action: apt
+      sudo: yes
+      args:
+        name: "{{item}}"
+      with_items:
+        - xserver-xephyr
+      action: pip
+      args:
+        name: "{{item}}"
+        virtualenv: "{{lookup('ENV', 'HOME')}}/.virtualenv"
+      with_items:
+        - cairocffi
+        - iwlib
+        - nose
+        - sh
+        - trollius
+        - xcffib
+        - python-mpd2
+        - google-api-python-client
 
 - name: dmenu
   hosts: all
@@ -224,6 +225,11 @@
         dest: "~/{{item}}"
       with_items:
        - "{{dropbox_link_dirs}}"
+
+- name: misc
+  hosts: all
+  tasks:
+    - shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Vertex-Dark"'
 
 # Local Variables:
 # mode: yaml
