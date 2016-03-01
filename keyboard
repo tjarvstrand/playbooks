@@ -59,8 +59,6 @@
 - name: Configure User Keyboard
   hosts: all
   tasks:
-    - shell: setxkbmap -layout custom -option 'caps:ctrl_modifier'
-      name: Set current layout
     - shell: gsettings set org.freedesktop.ibus.general.hotkey triggers []
       name: Disable ibus switcher triggers
 
