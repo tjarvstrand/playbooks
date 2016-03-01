@@ -142,6 +142,11 @@
         - xfce4-volumed
 
         # System tools
+        - dconf-gsettings-backend
+        - dconf-service
+        - gsettings-desktop-schemas
+        - gsettings-ubuntu-schemas
+
         - lightdm
         - light-locker
         - nautilus-dropbox

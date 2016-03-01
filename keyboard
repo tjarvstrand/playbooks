@@ -56,11 +56,6 @@
               MatchDevicePath "/dev/input/event*"
               Driver "evdev"
           EndSection
-- name: Configure User Keyboard
-  hosts: all
-  tasks:
-    - shell: gsettings set org.freedesktop.ibus.general.hotkey triggers []
-      name: Disable ibus switcher triggers
 
 # Local Variables:
 # mode: yaml
