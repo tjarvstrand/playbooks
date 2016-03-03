@@ -189,7 +189,7 @@
     - action: git
       args:
         repo: http://git.suckless.org/dmenu
-        dest: ~/src
+        dest: ~/src/dmenu
       ignore_errors: yes
     - shell: "make"
       args:

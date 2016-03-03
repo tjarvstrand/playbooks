@@ -67,12 +67,14 @@
         - markdown
         - mono-complete
         - nautilus-dropbox
+        - nodejs
         - network-manager
         - network-manager-openvpn
         - python-dev
         - python-software-properties # apt-add-repostory
         - rng-tools
         - ruby
+        - ruby-dev
         - tar
         - tree
         - unrar
