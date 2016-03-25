@@ -46,6 +46,7 @@
         - filezilla
         - firefox
         - gimp
+        - nautilus
         - skype
         - transmission
         - vinagre # vnc
@@ -199,6 +200,15 @@
       args:
         chdir: "~/src/dmenu"
 
+- name: Lightdm setup
+  hosts: all
+  tasks:
+    - shell: xhost +SI:localuser:lightdm
+      sudo: yes
+    - shell: gsettings set com.canonical.unity-greeter draw-grid false
+      sudo: yes
+      sudo_user: lightdm
+
 - name: Dropbox linking
   hosts: all
   tasks:
@@ -210,6 +220,7 @@
           - Documents
           - Pictures
           - .themes
+          - .icons
     - action: file
       name: Delete directories
       args:
