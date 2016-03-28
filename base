@@ -115,7 +115,7 @@
       args:
         dest: /etc/network/interfaces
         backup: yes
-        regexp: "(#*)?(.*?(eth[0-9]|eno[0-9]).*?\n)"
+        regexp: "(#*)?(.*?(eth[0-9]|en.[0-9]).*?\n)"
         replace: '#\2'
     - name: Create script to auto enable/disable wifi
       action: copy
