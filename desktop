@@ -27,6 +27,7 @@
         - xfce4-notifyd
         - xfce4-power-manager
         - xfce4-volumed
+        - xfce4-screenshooter-plugin
 
         # System tools
         - dconf-gsettings-backend
@@ -48,6 +49,7 @@
         - gimp
         - nautilus
         - skype
+        - spotify-client
         - transmission
         - vinagre # vnc
         - vlc

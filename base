@@ -60,18 +60,27 @@
       with_items:
         - aptitude
         - build-essential
+        - cups
+        - cups-bsd
+        - cups-pdf
         - curl
+        - foomatic-db # OpenPrinting printer support
+        - foomatic-db-compressed-ppds
         - git
         - gnupg
+        - gnupg-agent
         - gzip
+        - hplip #  HP Linux Printing and Imaging System
         - markdown
         - mono-complete
         - nautilus-dropbox
         - nodejs
         - network-manager
         - network-manager-openvpn
+        - printer-driver-all
         - python-dev
         - python-software-properties # apt-add-repostory
+        - read-edid
         - rng-tools
         - ruby
         - ruby-dev
@@ -80,6 +89,7 @@
         - unrar
         - xcompmgr
         - x11-xkb-utils
+        - xbacklight
         - xinput
         - wmname
 

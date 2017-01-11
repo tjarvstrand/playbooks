@@ -22,6 +22,7 @@
       with_items:
         - .config
         - .config/transmission
+        - .gnupg
         - .emacs.d
         - .lein
         - .mozilla
@@ -52,6 +53,13 @@
         force: yes
         src: "~/config-files/ssh-config"
         dest: "~/.ssh/config"
+        state: link
+    - action: file
+      name: Create gpg config symlink
+      args:
+        force: yes
+        src: "~/config-files/.gnupg/gpg.conf"
+        dest: "~/.gnupg/gpg.conf"
         state: link
     - action: file
       name: Create .config symlinks
@@ -114,6 +122,7 @@
       with_items:
         - profiles.ini
         - "{{firefox_default_profile}}/userChrome.css"
+    - shell: lesskey
 
 
 # Local Variables:
