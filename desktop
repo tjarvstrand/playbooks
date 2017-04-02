@@ -240,10 +240,10 @@
       with_items:
        - "{{dropbox_link_dirs}}"
 
-- name: misc
-  hosts: all
-  tasks:
-    - shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Vertex-Dark"'
+# - name: misc
+#   hosts: all
+#   tasks:
+#     - shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Vertex-Dark"'
 
 # Local Variables:
 # mode: yaml
