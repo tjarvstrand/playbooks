@@ -1,0 +1,34 @@
+---
+- name: "Base"
+  hosts: rpi
+  become: yes
+  vars:
+    ansible_ssh_user: pi
+    ansible_ssh_pass: raspberry
+  tasks:
+    - action: user
+      args:
+        name: tjarvstrand
+        group: wheel
+        password: "$1$snt$k1egiasF3ogFi6cPceSRI/"
+    - action: authorized_key
+      args:
+        user: tjarvstrand
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+    - action: lineinfile
+      args:
+        dest: /etc/sudoers
+        regexp: '^tjarvstrand'
+        line: 'tjarvstrand ALL=(ALL:ALL) ALL'
+    - action: locale_gen
+      args:
+        name: en_US.UTF-8
+    - action: user
+      args:
+        name: pi
+        state: absent
+
+# Local Variables:
+# mode: yaml
+# End:
+

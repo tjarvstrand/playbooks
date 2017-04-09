@@ -1,0 +1,17 @@
+---
+- name: "Delete pi user"
+  hosts: rpi
+  become: yes
+  vars:
+    ansible_ssh_user: tjarvstrand
+  tasks:
+    - action: user
+      args:
+        name: pi
+        state: absent
+        remove: yes
+
+# Local Variables:
+# mode: yaml
+# End:
+

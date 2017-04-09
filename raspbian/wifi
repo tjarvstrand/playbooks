@@ -1,0 +1,24 @@
+---
+- name: "Wifi"
+  hosts: rpi
+  become: yes
+  vars_prompt:
+  - name: "wifi_password"
+    prompt: "Enter Wifi password"
+    private: yes
+  tasks:
+    - shell: 'wpa_passphrase "wlan" {{wifi_password}} | grep -v "^\s*#psk"'
+      register: wpa_passphrase_result
+    - copy:
+        dest: /etc/wpa_supplicant/wpa_supplicant.conf
+        content: |
+          country=GB
+          ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+          update_config=1
+          {{ wpa_passphrase_result.stdout }}
+    - shell: wpa_cli reconfigure
+
+# Local Variables:
+# mode: yaml
+# End:
+
