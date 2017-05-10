@@ -1,0 +1,39 @@
+---
+- name: Configure Keyboard
+  hosts: all
+  sudo: yes
+  tasks:
+    - action: copy
+      name: Copy keyboard layout file
+      args:
+        src: "files/usr/share/X11/xkb/{{item}}"
+        dest: "/usr/share/X11/xkb/{{item}}"
+        backup: yes
+      with_items:
+        - rules/evdev.lst
+        - rules/evdev.xml
+        - symbols/us
+    - action: lineinfile
+      name: Set default keyboard layout
+      args:
+        dest: /etc/default/keyboard
+        regexp: ^XKBLAYOUT
+        line: XKBLAYOUT="us"
+    - action: lineinfile
+      name: Set default keyboard layout variant
+      args:
+        dest: /etc/default/keyboard
+        regexp: ^XKBVARIANT
+        line: XKBVARIANT="dvorak-sv,"
+    - action: lineinfile
+      name: Set default keyboard layout options
+      args:
+        dest: /etc/default/keyboard
+        regexp: ^XKBOPTIONS
+        line: XKBOPTIONS="caps:ctrl_modifier"
+    - shell: dpkg-reconfigure xkb-data
+      name: Reconfigure xkb
+
+# Local Variables:
+# mode: yaml
+# End:

@@ -1,0 +1,111 @@
+---
+- name: Directories
+  hosts: all
+  tasks:
+    - action: file
+      name: Create
+      args:
+        path: "{{item}}"
+        state: directory
+      with_items:
+        - ~/bin
+        - ~/.config
+    - action: file
+      name: Delete
+      args:
+        path: "{{item}}"
+        state: absent
+      with_items:
+        - ~/Music
+        - ~/Public
+        - ~/Templates
+        - ~/Videos
+        - ~/examples.desktop
+    - action: git
+      name: Clone bin repo
+      args:
+        repo: git@github.com:tjarvstrand/bin.git
+        dest: "~/bin"
+      ignore_errors: yes
+- name: Install packages
+  hosts: all
+  sudo: yes
+  tasks:
+    - action: apt
+      name: Install packages
+      args:
+        name: "{{item}}"
+      with_items:
+        - aptitude
+        - build-essential
+        - curl
+        - gnupg
+        - gnupg-agent
+        - markdown
+        - mono-complete
+        - nodejs
+        - python-dev
+        - python-software-properties # apt-add-repostory
+        - rng-tools
+        - tar
+        - tree
+        - unrar
+        - xcompmgr
+        - x11-xkb-utils
+        - xbacklight
+        - xinput
+        - wmname
+
+        # Emacs
+        - emacs
+        - emacs25-el
+
+        # erlang/otp
+        - autoconf
+        - libncurses5-dev
+        - libssl-dev
+    - shell: git config --global user.email "tjarvstrand@gmail.com"
+      sudo: no
+    - shell: git config --global user.name "Thomas Järvstrand"
+      sudo: no
+    - shell: localectl set-keymap dvorak
+    - action: lineinfile
+      args:
+        regexp: "[# ]*keycode 58 ="
+        line: "keycode 58 = Control"
+        dest: /etc/console-setup/remap.inc
+    - shell: dpkg-reconfigure -f noninteractive keyboard-configuration
+- name: Networking
+  hosts: all
+  sudo: yes
+  tasks:
+    - name: Create script to auto enable/disable wifi
+      action: copy
+      args:
+        dest: /etc/NetworkManager/dispatcher.d/99-wifi-disable-on-ethernet
+        mode: u=rwx,g=r,o=r
+        content: |
+          #!/bin/sh
+          myname=${0##*/}
+          log() { logger -p user.info -t "${myname}[$$]" "$*"; }
+          IFACE=$1
+          ACTION=$2
+
+          case ${IFACE} in
+              eth*|eno*|usb*)
+                  case ${ACTION} in
+                      up)
+                          log "disabling wifi radio"
+                          nmcli radio wifi off
+                      ;;
+                      down)
+                          log "enabling wifi radio"
+                          nmcli radio wifi on
+                      ;;
+                  esac
+              ;;
+          esac
+
+# Local Variables:
+# mode: yaml
+# End:

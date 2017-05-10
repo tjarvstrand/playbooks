@@ -1,0 +1,130 @@
+---
+- name: Config files
+  hosts: all
+  tasks:
+    - action: git
+      name: Clone git repo
+      args:
+        repo: git@github.com:tjarvstrand/config-files.git
+        dest: "~/config-files"
+      ignore_errors: yes
+    - shell: ls -d *.default
+      args:
+        chdir: ~/config-files/.mozilla/firefox
+      register: firefox_default_profile_result
+    - set_fact:
+        firefox_default_profile: "{{firefox_default_profile_result.stdout}}"
+    - action: file
+      name: Ensure directories
+      args:
+        dest: "~/{{item}}"
+        state: directory
+      with_items:
+        - .config
+        - .config/transmission
+        - .gnupg
+        - .emacs.d
+        - .lein
+        - .mozilla
+        - .mozilla/firefox
+        - .mozilla/firefox/{{firefox_default_profile}}
+    - action: file
+      name: Create symlinks
+      args:
+        force: yes
+        src: "{{item}}"
+        dest: "~/{{item | basename}}"
+        state: link
+      with_fileglob:
+        - "~/config-files/.*"
+    - action: file
+      name: Create directory symlinks
+      args:
+        force: yes
+        src: "{{item}}"
+        dest: "~/{{item | basename}}"
+        state: link
+      with_items:
+        - ~/config-files/.xchat2
+        - ~/config-files/.xmonad
+    - action: file
+      name: Create ssh config symlink
+      args:
+        force: yes
+        src: "~/config-files/ssh-config"
+        dest: "~/.ssh/config"
+        state: link
+    - action: file
+      name: Create gpg config symlink
+      args:
+        force: yes
+        src: "~/config-files/.gnupg/gpg.conf"
+        dest: "~/.gnupg/gpg.conf"
+        state: link
+    - action: file
+      name: Create .config symlinks
+      args:
+        force: yes
+        src: "~/config-files/{{item}}"
+        dest: "~/.config/{{item}}"
+        state: link
+      with_items:
+        - gtk-2.0
+        - gtk-3.0
+        - terminator
+        - qtile
+    - action: file
+      name: Create Transmission config symlink
+      args:
+        force: yes
+        src: "~/config-files/transmission/settings.json"
+        dest: "~/.config/transmission/settings.json"
+        state: link
+    - action: file
+      name: Create Emacs lib symlink
+      args:
+        force: yes
+        src: "~/config-files/.emacs.d/lib"
+        dest: "~/.emacs.d/lib"
+        state: link
+    - action: file
+      name: Delete local gnome-do config
+      ignore_errors: yes
+      args:
+        state: absent
+        path: ~/.gconf/apps/gnome-do
+    - action: file
+      name: Create gnome-do config directory
+      args:
+        dest: ~/.gconf/apps/gnome-do
+        state: directory
+    - action: file
+      name: Create gnome-do config symlink
+      args:
+        force: yes
+        src: ~/config-files/.gconf/apps/gnome-do
+        dest: ~/.gconf/apps/gnome-do
+        state: link
+    - action: file
+      name: Create Leningen profiles symlink
+      args:
+        force: yes
+        src: ~/config-files/.lein/profiles.clj
+        dest: ~/.lein/profiles.clj
+        state: link
+    - action: file
+      name: Create Firefox config file symlinks
+      args:
+        force: yes
+        src: "~/config-files/.mozilla/firefox/{{item}}"
+        dest: "~/.mozilla/firefox/{{item}}"
+        state: link
+      with_items:
+        - profiles.ini
+        - "{{firefox_default_profile}}/userChrome.css"
+    - shell: lesskey
+
+
+# Local Variables:
+# mode: yaml
+# End:
