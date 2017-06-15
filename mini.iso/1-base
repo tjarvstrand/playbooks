@@ -29,7 +29,7 @@
       ignore_errors: yes
 - name: Install packages
   hosts: all
-  sudo: yes
+  become: yes
   tasks:
     - action: apt
       name: Install lsb-core
@@ -58,57 +58,67 @@
       args:
         name: "{{item}}"
       with_items:
+
+        - alsa-utils
         - aptitude
+        - autoconf
         - build-essential
         - cups
         - cups-bsd
         - cups-pdf
         - curl
-        - foomatic-db # OpenPrinting printer support
-        - foomatic-db-compressed-ppds
+        - emacs
+        - emacs25-el
+        - emacs-goodies-el
+#        - foomatic-db # OpenPrinting printer support
+#        - foomatic-db-compressed-ppds
         - git
         - gnupg
         - gnupg-agent
         - gzip
-        - hplip #  HP Linux Printing and Imaging System
+#        - hplip #  HP Linux Printing and Imaging System
         - markdown
         - mono-complete
         - nautilus-dropbox
         - nodejs
         - network-manager
         - network-manager-openvpn
-        - printer-driver-all
+        - net-tools
+ #       - printer-driver-all
         - python-dev
         - python-software-properties # apt-add-repostory
         - read-edid
         - rng-tools
+        - software-properties-common
         - ruby
         - ruby-dev
         - tar
         - tree
         - unrar
+        - usbmount # Automount usb
         - xcompmgr
         - x11-xkb-utils
         - xbacklight
         - xinput
         - wmname
 
-        # Emacs
-        - emacs24
-        - emacs24-el
-        - emacs-goodies-el
-
         # erlang/otp
-        - autoconf
         - libncurses5-dev
         - libssl-dev
         # erlang wx support
-        - libwxgtk2.8-dev
-        - freeglut3-dev
+ #       - libwxgtk2.8-dev
+ #       - freeglut3-dev
+
     - shell: git config --global user.email "tjarvstrand@gmail.com"
-      sudo: no
+      become: no
     - shell: git config --global user.name "Thomas Järvstrand"
-      sudo: no
+      become: no
+    - name: Set console font size
+      action: replace
+      args:
+        dest: /etc/default/console-setup
+        regexp: "FONTSIZE=.*"
+        replace: "FONTSIZE=10x20"
     - shell: localectl set-keymap dvorak
     - action: lineinfile
       args:
@@ -118,7 +128,7 @@
     - shell: dpkg-reconfigure -f noninteractive keyboard-configuration
 - name: Networking
   hosts: all
-  sudo: yes
+  become: yes
   tasks:
     - name: Disable auto up of ethernet interfaces
       action: replace
@@ -127,6 +137,18 @@
         backup: yes
         regexp: "(#*)?(.*?(eth[0-9]|en.[0-9]).*?\n)"
         replace: '#\2'
+    - name: Disable auto up of ethernet interfaces
+      action: replace
+      args:
+        dest: /etc/NetworkManager/NetworkManager.conf
+        backup: yes
+        regexp: managed=false
+        replace: managed=true
+    - name: Override NetworkManager only managing wifi
+      action: copy
+      args:
+        dest: /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+        content: ""
     - name: Create script to auto enable/disable wifi
       action: copy
       args:

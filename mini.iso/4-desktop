@@ -8,7 +8,7 @@
       args:
         repo: "{{item}}"
       with_items:
-        - ppa:ubuntu-wine/ppa
+        #- ppa:ubuntu-wine/ppa
         - "deb http://repository.spotify.com stable non-free"
     - action: apt_key
       name: Add Spotify apt key
@@ -38,7 +38,9 @@
         - lightdm
         - light-locker
         - nautilus-dropbox
+        - network-manager-open-vpn-gnome
         - pavucontrol
+        - python-pip
         - suckless-tools
         - synaptic
         - terminator
@@ -49,11 +51,11 @@
         - gimp
         - nautilus
         - skype
-        - spotify-client
+#        - spotify-client
         - transmission
         - vinagre # vnc
         - vlc
-        - wine
+#        - wine
 
         # Plugins
         #- adobe-flashpluginx
@@ -157,28 +159,28 @@
           [Seat:*]
           user-session=qtile
 
-- name: qtile hacking
-  hosts: all
-  tasks:
-    - action: apt
-      sudo: yes
-      args:
-        name: "{{item}}"
-      with_items:
-        - xserver-xephyr
-      action: pip
-      args:
-        name: "{{item}}"
-        virtualenv: "{{lookup('ENV', 'HOME')}}/.virtualenv"
-      with_items:
-        - cairocffi
-        - iwlib
-        - nose
-        - sh
-        - trollius
-        - xcffib
-        - python-mpd2
-        - google-api-python-client
+# - name: qtile hacking
+#   hosts: all
+#   tasks:
+#     - action: apt
+#       sudo: yes
+#       args:
+#         name: "{{item}}"
+#       with_items:
+#         - xserver-xephyr
+#       action: pip
+#       args:
+#         name: "{{item}}"
+#         virtualenv: "{{lookup('ENV', 'HOME')}}/.virtualenv"
+#       with_items:
+#         - cairocffi
+#         - iwlib
+#         - nose
+#         - sh
+#         - trollius
+#         - xcffib
+#         - python-mpd2
+#         - google-api-python-client
 
 - name: dmenu
   hosts: all
@@ -205,8 +207,8 @@
 - name: Lightdm setup
   hosts: all
   tasks:
-    - shell: xhost +SI:localuser:lightdm
-      sudo: yes
+#    - shell: xhost +SI:localuser:lightdm
+#      sudo: yes
     - shell: gsettings set com.canonical.unity-greeter draw-grid false
       sudo: yes
       sudo_user: lightdm

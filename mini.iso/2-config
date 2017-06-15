@@ -121,7 +121,8 @@
         state: link
       with_items:
         - profiles.ini
-        - "{{firefox_default_profile}}/userChrome.css"
+        - "{{firefox_default_profile}}/chrome/userChrome.css"
+        - "{{firefox_default_profile}}/prefs.js"
     - shell: lesskey
 
 
