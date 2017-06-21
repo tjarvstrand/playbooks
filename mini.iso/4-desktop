@@ -32,9 +32,9 @@
         # System tools
         - dconf-gsettings-backend
         - dconf-service
+        - gparted
         - gsettings-desktop-schemas
         - gsettings-ubuntu-schemas
-
         - lightdm
         - light-locker
         - nautilus-dropbox
@@ -46,6 +46,7 @@
         - terminator
 
         # Applications
+        - evince # pdf reader
         - filezilla
         - firefox
         - gimp
@@ -207,8 +208,8 @@
 - name: Lightdm setup
   hosts: all
   tasks:
-#    - shell: xhost +SI:localuser:lightdm
-#      sudo: yes
+    - shell: xhost +SI:localuser:lightdm
+      sudo: yes
     - shell: gsettings set com.canonical.unity-greeter draw-grid false
       sudo: yes
       sudo_user: lightdm
@@ -218,8 +219,6 @@
   tasks:
     - set_fact:
         dropbox_link_dirs:
-          - doc
-          - src
           - Desktop
           - Documents
           - Pictures
