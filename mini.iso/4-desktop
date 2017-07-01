@@ -24,9 +24,8 @@
         - libgtk-3-dev # For building themes
 
         #
-        - xfce4-notifyd
+        - notify-osd
         - xfce4-power-manager
-        - xfce4-volumed
         - xfce4-screenshooter-plugin
 
         # System tools
