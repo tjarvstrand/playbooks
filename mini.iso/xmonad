@@ -12,7 +12,7 @@
         - xmonad
         - libghc-dbus-dev
         - cabal-install
-    sudo: yes
+    become: yes
     - shell: cabal update
     - shell: cabal install xmonad-extras xmonad-contrib
       name: Install xmonad-extras

@@ -1,7 +1,7 @@
 ---
 - name: misc packages
   hosts: all
-  sudo: yes
+  become: yes
   tasks:
     - action: apt_repository
       name: Add apt repositories
@@ -73,13 +73,13 @@
   hosts: all
   tasks:
     - action: file
-      sudo: yes
+      become: yes
       args:
         state: directory
         dest: /etc/X11/Xsession.d
     - name: Xsession file
       action: copy
-      sudo: yes
+      become: yes
       args:
         dest: /etc/X11/Xsession.d/56mysession
         content: |
@@ -91,7 +91,7 @@
           synclient HorizScrollDelta=-111
     # - name: XOrg config
     #   action: copy
-    #   sudo: yes
+    #   become: yes
     #   args:
     #     src: files/usr/share/X11/xorg.conf.d/100-compositing.conf
     #     dest: /usr/share/X11/xorg.conf.d/100-compositing.conf
@@ -103,20 +103,20 @@
           URxvt.depth: 32
           URxvt*background: rgba:0000/0000/0000/cccc
     - action: copy
-      sudo: yes
+      become: yes
       args:
         dest: /etc/udev/rules.d/70-detect-screen.rules
         content: |
           KERNEL=="card0", SUBSYSTEM=="drm", RUN+="/home/tjarvstrand/bin/detect_screens"
     - action: service
-      sudo: yes
+      become: yes
       args:
         name: udev
         state: restarted
 
 - name: qtile
   hosts: all
-  sudo: yes
+  become: yes
   tasks:
     - action: apt
       args:
@@ -166,7 +166,7 @@
 #   hosts: all
 #   tasks:
 #     - action: apt
-#       sudo: yes
+#       become: yes
 #       args:
 #         name: "{{item}}"
 #       with_items:
@@ -203,7 +203,7 @@
     - shell: "make"
       args:
         chdir: "~/src/dmenu"
-    - shell: "sudo make install"
+    - shell: "become make install"
       args:
         chdir: "~/src/dmenu"
 
@@ -211,10 +211,10 @@
   hosts: all
   tasks:
     - shell: xhost +SI:localuser:lightdm
-      sudo: yes
+      become: yes
     - shell: gsettings set com.canonical.unity-greeter draw-grid false
-      sudo: yes
-      sudo_user: lightdm
+      become: yes
+      become_user: lightdm
 
 - name: Dropbox linking
   hosts: all

@@ -1,7 +1,7 @@
 ---
 - name: Docker
   hosts: all
-  sudo: yes
+  become: yes
   tasks:
     - action: apt
       name: Install lsb-core
