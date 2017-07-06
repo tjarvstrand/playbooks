@@ -24,11 +24,14 @@
         - libgtk-3-dev # For building themes
 
         #
+        - blueman # bluetooth applet
         - notify-osd
+        - redshift # screen color temperature
         - xfce4-power-manager
         - xfce4-screenshooter-plugin
 
         # System tools
+        - baobab
         - dconf-gsettings-backend
         - dconf-service
         - gparted
