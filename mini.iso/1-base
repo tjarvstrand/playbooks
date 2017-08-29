@@ -126,6 +126,14 @@
         line: "keycode 58 = Control"
         dest: /etc/console-setup/remap.inc
     - shell: dpkg-reconfigure -f noninteractive keyboard-configuration
+    - name: Set inotify watch limit
+      action: lineinfile
+      args:
+        regexp: "fs.inotify.max_user_watches.*"
+        line: "fs.inotify.max_user_watches=524288"
+        dest: /etc/sysctl.conf
+    - shell: sysctl -p --system
+
 - name: Networking
   hosts: all
   become: yes
