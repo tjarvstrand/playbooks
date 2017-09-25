@@ -1,0 +1,28 @@
+---
+- name: Docker
+  hosts: all
+  become: yes
+  tasks:
+    - action: apt
+      name: Install lsb-core
+      args:
+        name: lsb-core
+    - shell: lsb_release -cs
+      register: ubuntu_codename
+    - action: apt_key
+      name: Add apt keys
+      args:
+        url: https://download.docker.com/linux/ubuntu/gpg
+    - action: apt_repository
+      name: Add apt repositories
+      args:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ubuntu_codename.stdout}} stable"
+    - action: apt
+      name: Install packages
+      args:
+        update_cache: yes
+        name: docker-ce
+
+# Local Variables:
+# mode: yaml
+# End:

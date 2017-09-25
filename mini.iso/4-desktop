@@ -9,6 +9,7 @@
         repo: "{{item}}"
       with_items:
         #- ppa:ubuntu-wine/ppa
+        - ppa:hluk/copyq
         - "deb http://repository.spotify.com stable non-free"
     - action: apt_key
       name: Add Spotify apt key
@@ -32,6 +33,7 @@
 
         # System tools
         - baobab
+        - copyq
         - dconf-gsettings-backend
         - dconf-service
         - gparted
@@ -40,7 +42,7 @@
         - lightdm
         - light-locker
         - nautilus-dropbox
-        - network-manager-open-vpn-gnome
+        - network-manager-openvpn-gnome
         - pavucontrol
         - python-pip
         - suckless-tools
@@ -48,6 +50,7 @@
         - terminator
 
         # Applications
+        - eog
         - evince # pdf reader
         - filezilla
         - firefox
@@ -67,28 +70,13 @@
         - numix-gtk-theme # for xfce4-notifyd
         - ttf-mscorefonts-installer
         - ttf-ubuntu-font-family
+        - xcursor-themes
         - xubuntu-icon-theme
+        - adwaita-icon-theme
 
 - name: X
   hosts: all
   tasks:
-    - action: file
-      become: yes
-      args:
-        state: directory
-        dest: /etc/X11/Xsession.d
-    - name: Xsession file
-      action: copy
-      become: yes
-      args:
-        dest: /etc/X11/Xsession.d/56mysession
-        content: |
-          syndaemon -d -i 1.0 -R -K -t -p ~/.syndaemon.pid
-          xcompmgr -Ff -O 0.15 -I 0.15 &
-          xinput set-prop "SynPS/2 Synaptics TouchPad" "Synaptics Finger" 45 50 10
-          setxkbmap -option ctrl:nocaps
-          synclient VertScrollDelta=-111
-          synclient HorizScrollDelta=-111
     # - name: XOrg config
     #   action: copy
     #   become: yes
@@ -102,12 +90,13 @@
         content: |
           URxvt.depth: 32
           URxvt*background: rgba:0000/0000/0000/cccc
+          Xcursor.size: 24
     - action: copy
       become: yes
       args:
-        dest: /etc/udev/rules.d/70-detect-screen.rules
+        dest: /etc/udev/rules.d/70-drm_event.rules
         content: |
-          KERNEL=="card0", SUBSYSTEM=="drm", RUN+="/home/tjarvstrand/bin/detect_screens"
+          KERNEL=="card0", SUBSYSTEM=="drm", RUN+="/home/tjarvstrand/bin/udev_drm_event"
     - action: service
       become: yes
       args:
@@ -187,6 +176,8 @@
 
 - name: dmenu
   hosts: all
+  vars:
+    user_home: "{{ lookup('ENV', 'HOME') }}"
   tasks:
     - action: apt
       args:
@@ -203,9 +194,10 @@
     - shell: "make"
       args:
         chdir: "~/src/dmenu"
-    - shell: "become make install"
+    - shell: "make install"
+      become: yes
       args:
-        chdir: "~/src/dmenu"
+        chdir: "{{user_home}}/src/dmenu"
 
 - name: Lightdm setup
   hosts: all

@@ -2,7 +2,24 @@
 - name: Configure Keyboard and mouse/touchpad
   hosts: all
   become: yes
+  vars:
+    cursor_size: 48
   tasks:
+    - action: file
+      args:
+        state: directory
+        dest: /etc/X11/Xsession.d
+    - name: Xsession file
+      action: copy
+      become: yes
+      args:
+        dest: /etc/X11/Xsession.d/56mysession
+        content: |
+          syndaemon -d -R -K -i 1.0 -p ~/.syndaemon.pid
+          xcompmgr -Ff -O 0.15 -I 0.15 &
+          xinput set-prop "SynPS/2 Synaptics TouchPad" "Synaptics Finger" 45 50 10
+          setxkbmap -option ctrl:nocaps
+
     - action: copy
       name: Backup files
       args:
@@ -43,13 +60,22 @@
     - script: scripts/add-evdev-lst /usr/share/X11/xkb/rules/evdev.lst
       name: Add xkb rules to evdev.lst
 
+    - action: alternatives
+      name: Set X cursor theme
+      args:
+        name: x-cursor-theme
+        path: /usr/share/icons/DMZ-Black/cursor.theme
+        priority: 101
+
     - action: lineinfile
       name: Set X mouse pointer size
       args:
         dest: /etc/X11/Xresources/x11-common
         regexp: "^Xcursor.size:.*"
-        line: "Xcursor.size: 20"
-    - shell: dconf write /org/gnome/desktop/interface/cursor-size 20
+        line: "Xcursor.size: {{ cursor_size }}"
+
+    - shell: "dconf write /org/gnome/desktop/interface/cursor-size {{ cursor_size }}"
+
     - action: copy
       name: Create xorg.conf
       args:
@@ -66,73 +92,15 @@
               Driver "evdev"
           EndSection
 
-
-# Section "InputClass"
-#     Identifier "touchpad catchall"
-#     Driver "synaptics"
-#     MatchIsTouchpad "on"
-#     MatchDevicePath "/dev/input/event*"
-#     #Option "LeftEdge" "123"
-#     #Option "RightEdge" "2950"
-#     #Option "TopEdge" "83"
-#     #Option "BottomEdge" "1454"
-#     Option "FingerLow" "6"
-#     Option "FingerHigh" "10"
-#     Option "MaxTapTime" "180"
-#     Option "MaxTapMove" "151"
-#     Option "MaxDoubleTapTime" "180"
-#     Option "SingleTapTimeout" "180"
-#     Option "ClickTime" "100"
-#     Option "EmulateMidButtonTime" "75"
-#     Option "EmulateTwoFingerMinZ" "71"
-#     Option "EmulateTwoFingerMinW" "7"
-#     Option "VertScrollDelta" "-111"
-#     Option "HorizScrollDelta" "-111"
-#     Option "VertEdgeScroll" "1"
-#     Option "HorizEdgeScroll" "0"
-#     Option "CornerCoasting" "0"
-#     Option "VertTwoFingerScroll" "1"
-#     Option "HorizTwoFingerScroll" "0"
-#     Option "MinSpeed" "1"
-#     Option "MaxSpeed" "1.75"
-#     Option "AccelFactor" "0.0582581"
-#     Option "TouchpadOff" "2"
-#     Option "LockedDrags" "0"
-#     Option "LockedDragTimeout" "5000"
-#     Option "RTCornerButton" "2"
-#     Option "RBCornerButton" "3"
-#     Option "LTCornerButton" "0"
-#     Option "LBCornerButton" "0"
-#     Option "TapButton1" "1"
-#     Option "TapButton2" "3"
-#     Option "TapButton3" "0"
-#     Option "ClickFinger1" "1"
-#     Option "ClickFinger2" "1"
-#     Option "ClickFinger3" "0"
-#     Option "CircularScrolling" "0"
-#     Option "CircScrollDelta" "0.1"
-#     Option "CircScrollTrigger" "0"
-#     Option "CircularPad" "0"
-#     Option "PalmDetect" "0"
-#     Option "PalmMinWidth" "10"
-#     Option "PalmMinZ" "50"
-#     Option "CoastingSpeed" "20"
-#     Option "CoastingFriction" "50"
-#     Option "PressureMotionMinZ" "7"
-#     Option "PressureMotionMaxZ" "40"
-#     Option "PressureMotionMinFactor" "1"
-#     Option "PressureMotionMaxFactor" "1"
-#     Option "ResolutionDetect" "1"
-#     Option "GrabEventDevice" "0"
-#     Option "TapAndDragGesture" "1"
-#     Option "AreaLeftEdge" "0"
-#     Option "AreaRightEdge" "0"
-#     Option "AreaTopEdge" "0"
-#     Option "AreaBottomEdge" "0"
-#     Option "HorizHysteresis" "17"
-#     Option "VertHysteresis" "17"
-#     Option "ClickPad" "0"
-# EndSection
+          Section "InputClass"
+            Identifier "Set Touchpad options"
+            Driver "synaptics"
+            MatchIsTouchpad "on"
+            MatchDevicePath "/dev/input/event*"
+            Option "VertScrollDelta" "-111"
+            Option "HorizScrollDelta" "-111"
+            Option "FingerHigh" "100"
+          EndSection
 
 # Local Variables:
 # mode: yaml
