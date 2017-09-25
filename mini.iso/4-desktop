@@ -26,6 +26,7 @@
 
         #
         - blueman # bluetooth applet
+        - feh # Desktop background
         - notify-osd
         - redshift # screen color temperature
         - xfce4-power-manager
