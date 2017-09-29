@@ -10,12 +10,18 @@
       with_items:
         #- ppa:ubuntu-wine/ppa
         - ppa:hluk/copyq
+        - ppa:leolik/leolik # notify-osd fork
         - "deb http://repository.spotify.com stable non-free"
     - action: apt_key
       name: Add Spotify apt key
       args:
         keyserver: hkp://keyserver.ubuntu.com:80
         id: BBEBDCB318AD50EC6865090613B00F1FD2C19886
+
+    - action: apt
+      args:
+        update_cache: yes
+
     - action: apt
       args:
         name: "{{item}}"
