@@ -47,6 +47,12 @@
       action: apt_repository
       args:
         repo: "deb http://archive.canonical.com/ubuntu {{ubuntu_codename.stdout}} partner"
+
+    - name: Add Git ppa
+      action: apt_repository
+      args:
+        repo: ppa:git-core/ppa
+
     # - name: Add ubuntu universe
     #   action: apt_repository
     #   args:
@@ -60,6 +66,7 @@
       name: Install packages
       args:
         name: "{{item}}"
+        state: latest
       with_items:
 
         - alsa-utils
