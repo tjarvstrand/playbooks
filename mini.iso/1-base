@@ -100,9 +100,11 @@
         - read-edid
         - rng-tools
         - software-properties-common
+        - ssh-askpass
         - ruby
         - ruby-dev
         - tar
+        - tmux
         - tree
         - unrar
         - usbmount # Automount usb
