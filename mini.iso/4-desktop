@@ -10,13 +10,7 @@
       with_items:
         #- ppa:ubuntu-wine/ppa
         - ppa:hluk/copyq
-        - ppa:leolik/leolik # notify-osd fork
-        - "deb http://repository.spotify.com stable non-free"
-    - action: apt_key
-      name: Add Spotify apt key
-      args:
-        keyserver: hkp://keyserver.ubuntu.com:80
-        id: BBEBDCB318AD50EC6865090613B00F1FD2C19886
+        #- ppa:leolik/leolik # notify-osd fork # doesn't have ardwark yet
 
     - action: apt
       args:
@@ -65,15 +59,9 @@
         - gnome-calculator
         - graphviz
         - nautilus
-        - skype
-#        - spotify-client
         - transmission
         - vinagre # vnc
         - vlc
-#        - wine
-
-        # Plugins
-        #- adobe-flashpluginx
 
         # UI
         - numix-gtk-theme # for xfce4-notifyd
