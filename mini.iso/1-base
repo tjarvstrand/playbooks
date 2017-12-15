@@ -27,6 +27,7 @@
         repo: git@github.com:tjarvstrand/bin.git
         dest: "~/bin"
       ignore_errors: yes
+
 - name: Install packages
   hosts: all
   become: yes
@@ -125,6 +126,20 @@
       become: no
     - shell: git config --global user.name "Thomas Järvstrand"
       become: no
+    - shell: git config --global init.templatedir "~/.git_templates"
+      become: no
+    - action: file
+      become: no
+      args:
+        dest: "~/.git_templates"
+        state: directory
+    - action: file
+      become: no
+      args:
+        src: "~/bin/git-hooks/prepare-commit-msg.add-ticket-number"
+        dest: "~/.git_templates/hooks/prepare-commit-msg"
+        state: link
+
     - name: Set console font size
       action: replace
       args:
@@ -215,8 +230,6 @@
                   esac
               ;;
           esac
-
-
 
 # Local Variables:
 # mode: yaml
