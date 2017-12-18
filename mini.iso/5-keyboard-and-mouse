@@ -6,6 +6,7 @@
     cursor_size: 48
   tasks:
     - action: file
+      become: yes
       args:
         state: directory
         dest: /etc/X11/Xsession.d
@@ -60,6 +61,11 @@
     - script: scripts/add-evdev-lst /usr/share/X11/xkb/rules/evdev.lst
       name: Add xkb rules to evdev.lst
 
+    - name: Install DMZ cursor theme
+      action: apt
+      args:
+        name: dmz-cursor-theme
+
     - action: alternatives
       name: Set X cursor theme
       args:
@@ -94,12 +100,12 @@
 
           Section "InputClass"
             Identifier "Set Touchpad options"
-            Driver "synaptics"
+            Driver "libinput"
             MatchIsTouchpad "on"
             MatchDevicePath "/dev/input/event*"
-            Option "VertScrollDelta" "-111"
-            Option "HorizScrollDelta" "-111"
-            Option "FingerHigh" "100"
+            Option "Tapping" "on"
+            Option "NaturalScrolling" "on"
+            Option "DisableWhileTyping" "on"
           EndSection
 
 # Local Variables:

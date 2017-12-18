@@ -131,7 +131,7 @@
     - action: file
       become: no
       args:
-        dest: "~/.git_templates"
+        dest: "~/.git_templates/hooks"
         state: directory
     - action: file
       become: no

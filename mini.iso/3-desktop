@@ -196,15 +196,6 @@
       args:
         chdir: "{{user_home}}/src/dmenu"
 
-- name: Lightdm setup
-  hosts: all
-  tasks:
-    - shell: xhost +SI:localuser:lightdm
-      become: yes
-    - shell: gsettings set com.canonical.unity-greeter draw-grid false
-      become: yes
-      become_user: lightdm
-
 - name: Dropbox linking
   hosts: all
   tasks:
@@ -231,6 +222,11 @@
         dest: "~/{{item}}"
       with_items:
        - "{{dropbox_link_dirs}}"
+
+- name: Restart
+  hosts: all
+  tasks:
+    - debug: msg="Reboot the machine now!"
 
 # - name: misc
 #   hosts: all
