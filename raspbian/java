@@ -1,0 +1,29 @@
+---
+- name: "Java"
+  hosts: all
+  become: yes
+  tasks:
+    - action: apt_key
+      name: Add apt keys
+      args:
+        keyserver: hkp://keyserver.ubuntu.com:80
+        id: 219BD9C9
+
+    - name: Add Zulu Java repo
+      action: apt_repository
+      args:
+        repo: 'deb http://repos.azulsystems.com/debian stable main'
+
+    - action: apt
+      name: Install packages
+      args:
+        name: "{{item}}"
+        state: latest
+      with_items:
+        - zulu-embedded-8
+
+
+# Local Variables:
+# mode: yaml
+# End:
+

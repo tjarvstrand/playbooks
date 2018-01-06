@@ -12,6 +12,12 @@
         - ppa:hluk/copyq
         #- ppa:leolik/leolik # notify-osd fork # doesn't have ardwark yet
 
+    - action: apt_repository
+      name: Add apt repositories
+      args:
+        repo: ppa:leolik/leolik
+        codename: zesty # notify-osd fork # doesn't have ardwark yet
+
     - action: apt
       args:
         update_cache: yes
@@ -27,6 +33,7 @@
         #
         - blueman # bluetooth applet
         - feh # Desktop background
+        - libnotify-bin
         - notify-osd
         - redshift # screen color temperature
         - xfce4-power-manager
