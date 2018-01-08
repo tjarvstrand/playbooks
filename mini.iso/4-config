@@ -28,6 +28,8 @@
         - .mozilla
         - .mozilla/firefox
         - .mozilla/firefox/{{firefox_default_profile}}
+        - .sbt/0.13/plugins
+        - .sbt/1.0/plugins
     - action: file
       name: Create symlinks
       args:
@@ -41,12 +43,12 @@
       name: Create directory symlinks
       args:
         force: yes
-        src: "{{item}}"
-        dest: "~/{{item | basename}}"
+        src: "~/config-files/{{item}}"
+        dest: "~/{{item}}"
         state: link
       with_items:
-        - ~/config-files/.xchat2
-        - ~/config-files/.xmonad
+        - .xchat2
+        - .xmonad
     - action: file
       name: Create ssh config symlink
       args:
@@ -87,6 +89,16 @@
         src: "~/config-files/.emacs.d/lib"
         dest: "~/.emacs.d/lib"
         state: link
+    - action: file
+      name: Create SBT config symlink
+      args:
+        force: yes
+        src: "~/config-files/.sbt/{{item}}"
+        dest: "~/.sbt/{{item}}"
+        state: link
+      with_items:
+        - 0.13/plugins/plugins.sbt
+        - 1.0/plugins/plugins.sbt
     - action: file
       name: Delete local gnome-do config
       ignore_errors: yes
