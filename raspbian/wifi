@@ -1,6 +1,6 @@
 ---
 - name: "Wifi"
-  hosts: rpi
+  hosts: all
   become: yes
   vars_prompt:
   - name: "wifi_password"
