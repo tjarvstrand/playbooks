@@ -9,7 +9,6 @@
     - action: user
       args:
         name: tjarvstrand
-        group: wheel
         password: "$1$snt$k1egiasF3ogFi6cPceSRI/"
     - action: authorized_key
       args:
@@ -23,10 +22,6 @@
     - action: locale_gen
       args:
         name: en_US.UTF-8
-    - action: user
-      args:
-        name: pi
-        state: absent
 
 # Local Variables:
 # mode: yaml
