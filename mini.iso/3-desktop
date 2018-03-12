@@ -69,6 +69,7 @@
         - transmission
         - vinagre # vnc
         - vlc
+        - wireshark
 
         # UI
         - numix-gtk-theme # for xfce4-notifyd

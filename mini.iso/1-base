@@ -8,8 +8,8 @@
         path: "{{item}}"
         state: directory
       with_items:
-        - ~/bin
         - ~/.config
+        - ~/src
     - action: file
       name: Delete
       args:
@@ -184,6 +184,7 @@
 - name: Networking
   hosts: all
   become: yes
+  tags: network
   tasks:
     - name: Disable auto up of ethernet interfaces
       action: replace
@@ -230,6 +231,38 @@
                   esac
               ;;
           esac
+
+- name: LastPass CLI
+  hosts: all
+  tags: lastpass
+  vars:
+    lastpass_dir: "{{lookup('env','HOME') + '/src/lastpass-cli'}}"
+  tasks:
+    - action: apt
+      name: Install LastPass CLI package dependencies
+      args:
+        name: "{{item}}"
+        state: latest
+      with_items:
+        - cmake
+        - libcurl4-openssl-dev
+        - libxml2-dev
+        - xclip
+    - action: git
+      name: Clone repo
+      args:
+        repo: https://github.com/lastpass/lastpass-cli.git
+        dest: "{{lastpass_dir}}"
+    - name: Build LastPass
+      shell: make
+      args:
+        chdir: "{{lastpass_dir}}"
+    - name: Install LastPass
+      shell: make install
+      become: yes
+      args:
+        chdir: "{{lastpass_dir}}"
+
 
 # Local Variables:
 # mode: yaml
