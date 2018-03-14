@@ -1,4 +1,16 @@
 ---
+- name: User
+  hosts: all
+  become: yes
+  tasks:
+    - name: Add user to groups
+      action: user
+      args:
+        append: yes
+        groups:
+          - dialout
+        user: tjarvstrand
+
 - name: Directories
   hosts: all
   tasks:
@@ -74,6 +86,7 @@
         - aptitude
         - autoconf
         - build-essential
+        - cifs-utils # Samba
         - cups
         - cups-bsd
         - cups-pdf
@@ -238,8 +251,9 @@
   vars:
     lastpass_dir: "{{lookup('env','HOME') + '/src/lastpass-cli'}}"
   tasks:
-    - action: apt
-      name: Install LastPass CLI package dependencies
+    - name: Install LastPass CLI package dependencies
+      action: apt
+      become: yes
       args:
         name: "{{item}}"
         state: latest
