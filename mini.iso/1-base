@@ -11,6 +11,21 @@
           - dialout
         user: tjarvstrand
 
+- name: System
+  hosts: all
+  become: yes
+  tags: system
+  tasks:
+    - name: Set Grub linux cmdline
+      action: lineinfile
+      args:
+        regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
+        line: 'GRUB_CMDLINE_LINUX_DEFAULT="nomodeset nosplash"'
+        dest: /etc/default/grub
+        backup: yes
+    - name: Update grub
+      shell: update-grub
+
 - name: Directories
   hosts: all
   tasks:

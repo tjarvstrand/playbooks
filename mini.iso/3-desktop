@@ -32,6 +32,7 @@
         # Libraries
         - libgtk-3-dev # For building themes
         - gstreamer1.0-pulseaudio # For Firefox pulseaudio
+        - ubuntu-restricted-extras # media codecs
 
         #
         - blueman # bluetooth applet
