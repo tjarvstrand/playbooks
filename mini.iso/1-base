@@ -20,7 +20,7 @@
       action: lineinfile
       args:
         regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
-        line: 'GRUB_CMDLINE_LINUX_DEFAULT="nomodeset nosplash"'
+        line: 'GRUB_CMDLINE_LINUX_DEFAULT="nosplash"'
         dest: /etc/default/grub
         backup: yes
     - name: Update grub
