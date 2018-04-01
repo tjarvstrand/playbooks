@@ -101,11 +101,11 @@
           Section "InputClass"
             Identifier "Set Touchpad options"
             Driver "libinput"
-            MatchIsTouchpad "on"
+            MatchIsTouchpad "true"
             MatchDevicePath "/dev/input/event*"
-            Option "Tapping" "on"
-            Option "NaturalScrolling" "on"
-            Option "DisableWhileTyping" "on"
+            Option "Tapping" "true"
+            Option "NaturalScrolling" "true"
+            Option "DisableWhileTyping" "true"
           EndSection
 
 # Local Variables:
