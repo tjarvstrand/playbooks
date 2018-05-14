@@ -97,7 +97,7 @@
         name: help2man
     - action: git
       args:
-        repo: https://github.com/haikarainen/light.git
+        repo: git://github.com/haikarainen/light.git
         dest: "{{dir}}"
     - shell: "make"
       args:
@@ -227,7 +227,7 @@
         - libxinerama-dev
     - action: git
       args:
-        repo: http://git.suckless.org/dmenu
+        repo: git://git.suckless.org/dmenu
         dest: ~/src/dmenu
       ignore_errors: yes
     - shell: "make"

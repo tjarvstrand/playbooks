@@ -30,14 +30,6 @@
   hosts: all
   tasks:
     - action: file
-      name: Create
-      args:
-        path: "{{item}}"
-        state: directory
-      with_items:
-        - ~/.config
-        - ~/src
-    - action: file
       name: Delete
       args:
         path: "{{item}}"
@@ -48,12 +40,6 @@
         - ~/Templates
         - ~/Videos
         - ~/examples.desktop
-    - action: git
-      name: Clone bin repo
-      args:
-        repo: git@github.com:tjarvstrand/bin.git
-        dest: "~/bin"
-      ignore_errors: yes
 
 - name: Install packages
   hosts: all
@@ -125,7 +111,6 @@
         - net-tools
         - printer-driver-all
         - python-dev
-        - python-software-properties # apt-add-repostory
         - read-edid
         - rng-tools
         - software-properties-common
@@ -149,24 +134,6 @@
         # erlang wx support
  #       - libwxgtk2.8-dev
  #       - freeglut3-dev
-
-    - shell: git config --global user.email "tjarvstrand@gmail.com"
-      become: no
-    - shell: git config --global user.name "Thomas Järvstrand"
-      become: no
-    - shell: git config --global init.templatedir "~/.git_templates"
-      become: no
-    - action: file
-      become: no
-      args:
-        dest: "~/.git_templates/hooks"
-        state: directory
-    - action: file
-      become: no
-      args:
-        src: "~/bin/git-hooks/prepare-commit-msg.add-ticket-number"
-        dest: "~/.git_templates/hooks/prepare-commit-msg"
-        state: link
 
     - name: Set console font size
       action: replace
@@ -280,7 +247,7 @@
     - action: git
       name: Clone repo
       args:
-        repo: https://github.com/lastpass/lastpass-cli.git
+        repo: git://github.com/lastpass/lastpass-cli.git
         dest: "{{lastpass_dir}}"
     - name: Build LastPass
       shell: make
