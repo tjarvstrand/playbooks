@@ -20,7 +20,9 @@
       action: lineinfile
       args:
         regexp: "^GRUB_CMDLINE_LINUX_DEFAULT"
-        line: 'GRUB_CMDLINE_LINUX_DEFAULT="nosplash"'
+        # Workaround for https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1722478
+        #line: 'GRUB_CMDLINE_LINUX_DEFAULT="nosplash"'
+        line: 'GRUB_CMDLINE_LINUX_DEFAULT="nosplash psmouse.synaptics_intertouch=0"'
         dest: /etc/default/grub
         backup: yes
     - name: Update grub
