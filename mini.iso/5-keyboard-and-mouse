@@ -108,6 +108,14 @@
             Option "DisableWhileTyping" "true"
           EndSection
 
+          Section "InputClass"
+            Identifier "Set Mouse options"
+            Driver "libinput"
+            MatchIsTouchpad "false"
+            MatchDevicePath "/dev/input/event*"
+            Option "AccelSpeed" "-0.7"
+          EndSection
+
 # Local Variables:
 # mode: yaml
 # End:
