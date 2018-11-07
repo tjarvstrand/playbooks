@@ -172,6 +172,14 @@
         line: "SystemMaxUse=20M"
         dest: /etc/systemd/journald.conf
 
+    - name: Configure usbmount
+      action: lineinfile
+      args:
+        regexp: ^MOUNTOPTIONS=
+        line: MOUNTOPTIONS="sync,noexec,nodev,noatime,nodiratime,uid=1000,gid=1000"
+        dest: /etc/usbmount/usbmount.conf
+
+
     - name: Restart journal
       action: systemd
       args:
