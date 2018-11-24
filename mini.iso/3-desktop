@@ -82,6 +82,8 @@
         - xcursor-themes
         - xubuntu-icon-theme
         - adwaita-icon-theme
+        - xmonad
+        - taffybar
 
 - name: light
   hosts: all
@@ -99,14 +101,16 @@
       args:
         repo: git://github.com/haikarainen/light.git
         dest: "{{dir}}"
-    - shell: "make"
+    - shell: "{{dir}}/autogen.sh"
+      args:
+        chdir: "{{dir}}"
+    - shell: "./configure && make"
       args:
         chdir: "{{dir}}"
     - shell: "make install"
       become: yes
       args:
         chdir: "{{dir}}"
-
 
 
 - name: X
@@ -140,55 +144,55 @@
         name: udev
         state: restarted
 
-- name: qtile
-  hosts: all
-  tags:
-    - qtile
-  become: yes
-  tasks:
-    - action: apt
-      args:
-        name: "{{item}}"
-      with_items:
-        - aptitude # for update checking
-        - libffi-dev
-        - libiw-dev
-        - libxcb-cursor0
-        - libxcb-cursor-dev
-        - libxcb-render0-dev
-        - libpangocairo-1.0-0
-        - python-dbus
-    - action: pip
-      args:
-        name: "{{item}}"
-      with_items:
-        - xcffib
-        - cairocffi
-        - trollius
-        - iwlib
-        - qtile
-        - sh
-    - action: file
-      args:
-        state: directory
-        dest: /usr/share/xsessions
-    - action: copy
-      args:
-        dest: /usr/share/xsessions/qtile.desktop
-        content: |
-          [Desktop Entry]
-          Encoding=UTF-8
-          Name=qtile
-          Comment=A full-featured, pure-Python tiling window manager
-          TryExec=qtile
-          Exec=qtile
-          Type=Application
-    - action: copy
-      args:
-        dest: /usr/share/lightdm/lightdm.conf.d/60-qtile.conf
-        content: |
-          [Seat:*]
-          user-session=qtile
+# - name: qtile
+#   hosts: all
+#   tags:
+#     - qtile
+#   become: yes
+#   tasks:
+#     - action: apt
+#       args:
+#         name: "{{item}}"
+#       with_items:
+#         - aptitude # for update checking
+#         - libffi-dev
+#         - libiw-dev
+#         - libxcb-cursor0
+#         - libxcb-cursor-dev
+#         - libxcb-render0-dev
+#         - libpangocairo-1.0-0
+#         - python-dbus
+#     - action: pip
+#       args:
+#         name: "{{item}}"
+#       with_items:
+#         - xcffib
+#         - cairocffi
+#         - trollius
+#         - iwlib
+#         - qtile
+#         - sh
+#     - action: file
+#       args:
+#         state: directory
+#         dest: /usr/share/xsessions
+#     - action: copy
+#       args:
+#         dest: /usr/share/xsessions/qtile.desktop
+#         content: |
+#           [Desktop Entry]
+#           Encoding=UTF-8
+#           Name=qtile
+#           Comment=A full-featured, pure-Python tiling window manager
+#           TryExec=qtile
+#           Exec=qtile
+#           Type=Application
+#     - action: copy
+#       args:
+#         dest: /usr/share/lightdm/lightdm.conf.d/60-qtile.conf
+#         content: |
+#           [Seat:*]
+#           user-session=qtile
 
 # - name: qtile hacking
 #   hosts: all
