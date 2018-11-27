@@ -1,0 +1,51 @@
+---
+- name: Polybar
+  hosts: all
+  vars:
+    dir: "{{ \"~/src/polybar\" | expanduser }}"
+  tasks:
+    - name: Install deps
+      action: apt
+      become: yes
+      args:
+        name:
+          - cmake
+          - cmake-data
+          - pkg-config
+          - libcairo2-dev
+          - libxcb1-dev
+          - libxcb-util0-dev
+          - libxcb-randr0-dev
+          - libxcb-composite0-dev
+          - python-xcbgen
+          - xcb-proto
+          - libxcb-image0-dev
+          - libxcb-ewmh-dev
+          - libxcb-icccm4-dev
+
+          # Optional
+          - libxcb-xkb-dev
+    - name: Clone repo
+      action: git
+      args:
+        recursive: yes
+        repo: https://github.com/jaagr/polybar.git
+        dest: "{{dir}}"
+    - name: Create build directory
+      action: file
+      args:
+        state: directory
+        dest: "{{dir}}/build"
+    - name: Compile
+      shell: cmake ..
+      args:
+        chdir: "{{dir}}/build"
+    - name: Install
+      shell: make install
+      become: yes
+      args:
+        chdir: "{{dir}}/build"
+
+# Local Variables:
+# mode: yaml
+# End:

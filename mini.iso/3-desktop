@@ -83,7 +83,6 @@
           - adwaita-icon-theme
 
           - xmonad
-          - taffybar
           - libdbusmenu-gtk3-dev
 
           - qtile
