@@ -5,10 +5,11 @@
     - name: Install pip
       action: apt
       args:
-        name: python-pip
+        name: python-pip3
       become: yes
     - name: Install virtualenv
-      action: apt
+      action: pip
+      executable: pip3
       args:
         name: virtualenv
       become: yes
@@ -19,6 +20,7 @@
       become: yes
     - name: Setup virtualenv
       action: pip
+      executable: pip3
       args:
         name: "{{item}}"
         virtualenv_site_packages: yes
@@ -32,22 +34,22 @@
         - awscli
         - stashy
         - docker-compose
-        - python-jenkins
+    #     - python-jenkins
 
-        # Fix InsecurePlatformWarning in Python < 2.7.9
-        - pyopenssl
-        - ndg-httpsclient
-        - pyasn1
-    - shell: >
-        . {{lookup('ENV', 'HOME')}}/.virtualenv/bin/activate && python -c 'from requests import certs; print certs.where()'
-      register: ca_cert
-    - action: file
-      args:
-        state: link
-        force: true
-        dest: "{{ca_cert.stdout}}"
-        src: /usr/lib/ssl/certs/ca-certificates.crt
-        follow: false
+    #     # Fix InsecurePlatformWarning in Python < 2.7.9
+    #     - pyopenssl
+    #     - ndg-httpsclient
+    #     - pyasn1
+    # - shell: >
+    #     . {{lookup('ENV', 'HOME')}}/.virtualenv/bin/activate && python -c 'from requests import certs; print certs.where()'
+    #   register: ca_cert
+    # - action: file
+    #   args:
+    #     state: link
+    #     force: true
+    #     dest: "{{ca_cert.stdout}}"
+    #     src: /usr/lib/ssl/certs/ca-certificates.crt
+    #     follow: false
 
 # Local Variables:
 # mode: yaml
