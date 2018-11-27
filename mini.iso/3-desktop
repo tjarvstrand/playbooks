@@ -26,64 +26,72 @@
 
     - action: apt
       args:
-        name: "{{item}}"
-      with_items:
+        name:
 
-        # Libraries
-        - libgtk-3-dev # For building themes
-        - gstreamer1.0-pulseaudio # For Firefox pulseaudio
-        - ubuntu-restricted-extras # media codecs
+          # Libraries
+          - libgtk-3-dev # For building themes
+          - gstreamer1.0-pulseaudio # For Firefox pulseaudio
+          - ubuntu-restricted-extras # media codecs
 
-        #
-        - blueman # bluetooth applet
-        - feh # Desktop background
-        - libnotify-bin
-        - notify-osd
-        - redshift # screen color temperature
-        - xfce4-power-manager
-        - xfce4-screenshooter-plugin
+          #
+          - blueman # bluetooth applet
+          - feh # Desktop background
+          - libnotify-bin
+          - notify-osd
+          - redshift # screen color temperature
+          - xfce4-power-manager
+          - xfce4-screenshooter-plugin
 
-        # System tools
-        - baobab
-        - copyq
-        - dconf-gsettings-backend
-        - dconf-service
-        - gparted
-        - gsettings-desktop-schemas
-        - gsettings-ubuntu-schemas
-        - lightdm
-        - light-locker
-        - nautilus-dropbox
-        - network-manager-openvpn-gnome
-        - pavucontrol
-        - python-pip
-        - suckless-tools
-        - synaptic
-        - terminator
+          # System tools
+          - baobab
+          - copyq
+          - dconf-gsettings-backend
+          - dconf-service
+          - gparted
+          - gsettings-desktop-schemas
+          - gsettings-ubuntu-schemas
+          - lightdm
+          - light-locker
+          - nautilus-dropbox
+          - network-manager-openvpn-gnome
+          - pavucontrol
+          - python-pip
+          - suckless-tools
+          - synaptic
+          - terminator
 
-        # Applications
-        - eog
-        - evince # pdf reader
-        - filezilla
-        - firefox
-        - gimp
-        - gnome-calculator
-        - graphviz
-        - nautilus
-        - transmission
-        - vinagre # vnc
-        - vlc
-        - wireshark
+          # Applications
+          - eog
+          - evince # pdf reader
+          - filezilla
+          - firefox
+          - gimp
+          - gnome-calculator
+          - graphviz
+          - nautilus
+          - transmission
+          - vinagre # vnc
+          - vlc
+          - wireshark
 
-        # UI
-        - numix-gtk-theme # for xfce4-notifyd
-        - ttf-mscorefonts-installer
-        - ttf-ubuntu-font-family
-        - xcursor-themes
-        - xubuntu-icon-theme
-        - adwaita-icon-theme
-        - xmonad
-        - taffybar
+          # UI
+          - numix-gtk-theme # for xfce4-notifyd
+          - ttf-mscorefonts-installer
+          - ttf-ubuntu-font-family
+          - xcursor-themes
+          - xubuntu-icon-theme
+          - adwaita-icon-theme
+
+          - xmonad
+          - taffybar
+          - libdbusmenu-gtk3-dev
+
+          - qtile
+
+    - action: copy
+      args:
+        src: files/usr/share/lightdm/lightdm.conf.d/60-session.conf
+        dest: /usr/share/lightdm/lightdm.conf.d/60-session.conf
 
 - name: light
   hosts: all
@@ -224,11 +232,11 @@
   tasks:
     - action: apt
       args:
-        name: "{{item}}"
-      with_items:
-        - libxft-dev
-        - libxft2
-        - libxinerama-dev
+        name:
+          - libxft-dev
+          - libxft2
+          - libxinerama-dev
+      become: yes
     - action: git
       args:
         repo: git://git.suckless.org/dmenu

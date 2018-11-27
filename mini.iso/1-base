@@ -81,61 +81,59 @@
     - action: apt
       name: Install packages
       args:
-        name: "{{item}}"
+        update_cache: yes
         state: latest
-      with_items:
+        name:
+          - alsa-utils
+          - aptitude
+          - autoconf
+          - build-essential
+          - cifs-utils # Samba
+          - cups
+          - cups-bsd
+          - cups-pdf
+          - curl
+          - cryptsetup # luks encryption
+          - cryptsetup-bin # luks encryption
+          - daemontools # check this out!
+          - emacs
+          - emacs25-el
+          - emacs-goodies-el
+          - git
+          - gnupg
+          - gnupg-agent
+          - gzip
+          - jq
+          - lsb-core
+          - markdown
+          - mono-complete
+          - nautilus-dropbox
+          - nodejs
+          - network-manager
+          - network-manager-openvpn
+          - net-tools
+          - printer-driver-all
+          - python-dev
+          - read-edid
+          - rng-tools
+          - software-properties-common
+          - ssh-askpass
+          - ruby
+          - ruby-dev
+          - tar
+          - tmux
+          - tree
+          - unrar
+          - usbmount # Automount usb
+          - xcompmgr
+          - x11-xkb-utils
+          - xbacklight
+          - xinput
+          - wmname
 
-        - alsa-utils
-        - aptitude
-        - autoconf
-        - build-essential
-        - cifs-utils # Samba
-        - cups
-        - cups-bsd
-        - cups-pdf
-        - curl
-        - daemontools # check this out!
-        - emacs
-        - emacs25-el
-        - emacs-goodies-el
-        - git
-        - gnupg
-        - gnupg-agent
-        - gzip
-        - jq
-        - lsb-core
-        - markdown
-        - mono-complete
-        - nautilus-dropbox
-        - nodejs
-        - network-manager
-        - network-manager-openvpn
-        - net-tools
-        - printer-driver-all
-        - python-dev
-        - read-edid
-        - rng-tools
-        - software-properties-common
-        - ssh-askpass
-        - ruby
-        - ruby-dev
-        - tar
-        - tmux
-        - tree
-        - unrar
-        - usbmount # Automount usb
-        - xcompmgr
-        - x11-xkb-utils
-        - xbacklight
-        - xinput
-        - wmname
-
-        # erlang/otp
-        - libncurses5-dev
-        - libssl-dev
-        # erlang wx support
- #       - libwxgtk2.8-dev
- #       - freeglut3-dev
+          # erlang/otp
+          - libncurses5-dev
+          - libssl-dev
 
     - name: Set console font size
       action: replace
@@ -247,13 +245,12 @@
       action: apt
       become: yes
       args:
-        name: "{{item}}"
         state: latest
-      with_items:
-        - cmake
-        - libcurl4-openssl-dev
-        - libxml2-dev
-        - xclip
+        name:
+          - cmake
+          - libcurl4-openssl-dev
+          - libxml2-dev
+          - xclip
     - action: git
       name: Clone repo
       args:
