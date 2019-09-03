@@ -22,6 +22,7 @@
           - libxcb-image0-dev
           - libxcb-ewmh-dev
           - libxcb-icccm4-dev
+          - python3-sphinx
 
           # Optional
           - libxcb-xkb-dev

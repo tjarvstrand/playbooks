@@ -45,6 +45,7 @@
           # System tools
           - baobab
           - copyq
+          - dconf-editor
           - dconf-gsettings-backend
           - dconf-service
           - gparted
@@ -120,7 +121,6 @@
       become: yes
       args:
         chdir: "{{dir}}"
-
 
 - name: X
   hosts: all
@@ -280,10 +280,6 @@
       with_items:
        - "{{dropbox_link_dirs}}"
 
-- name: Restart
-  hosts: all
-  tasks:
-    - debug: msg="Reboot the machine now!"
 
 - name: misc
   hosts: all
@@ -294,6 +290,11 @@
     - shell: 'gsettings set apps.light-locker lock-on-suspend false'
     - shell: 'gsettings set apps.light-locker lock-on-lid false'
     - shell: 'gsettings set apps.light-locker idle-hint false'
+
+- name: Restart
+  hosts: all
+  tasks:
+    - debug: msg="Reboot the machine now!"
 
 # Local Variables:
 # mode: yaml
