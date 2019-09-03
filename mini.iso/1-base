@@ -9,6 +9,8 @@
         append: yes
         groups:
           - dialout
+          - lpadmin
+          - kvm
         user: tjarvstrand
 
 - name: System
@@ -116,6 +118,7 @@
           - python-dev
           - read-edid
           - rng-tools
+          - qemu-kvm # virtualization stuff
           - software-properties-common
           - ssh-askpass
           - ruby

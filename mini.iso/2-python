@@ -5,13 +5,15 @@
     - name: Install pip
       action: apt
       args:
-        name: python-pip3
+        name:
+          - python3-pip
+          - python3-virtualenv
       become: yes
     - name: Install virtualenv
       action: pip
-      executable: pip3
       args:
         name: virtualenv
+        executable: pip3
       become: yes
     - name: Install libffi
       action: apt
@@ -20,20 +22,19 @@
       become: yes
     - name: Setup virtualenv
       action: pip
-      executable: pip3
       args:
-        name: "{{item}}"
+        executable: pip3
         virtualenv_site_packages: yes
         virtualenv: "{{lookup('ENV', 'HOME')}}/.virtualenv"
-      with_items:
-        - boto
-        - PyYaml
-        - keyring
-        - requests
-        - Jinja2
-        - awscli
-        - stashy
-        - docker-compose
+        name:
+          - boto
+          - keyring
+          - requests
+          - Jinja2
+          - awscli
+          - stashy
+          - docker-compose
+          - localstack
     #     - python-jenkins
 
     #     # Fix InsecurePlatformWarning in Python < 2.7.9

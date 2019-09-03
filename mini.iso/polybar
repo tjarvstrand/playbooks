@@ -45,6 +45,10 @@
       become: yes
       args:
         chdir: "{{dir}}/build"
+    - action: get_url
+      name: Fetch Font Awesome 5.5
+      args:
+        url: https://use.fontawesome.com/releases/v5.5.0/fontawesome-free-5.5.0-desktop.zip
 
 # Local Variables:
 # mode: yaml

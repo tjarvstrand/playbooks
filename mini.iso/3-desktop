@@ -52,6 +52,7 @@
           - gsettings-ubuntu-schemas
           - lightdm
           - light-locker
+          - light-locker-settings
           - nautilus-dropbox
           - network-manager-openvpn-gnome
           - pavucontrol
@@ -61,7 +62,7 @@
           - terminator
 
           # Applications
-          - eog
+          - eog # Eye of Gnome
           - evince # pdf reader
           - filezilla
           - firefox
@@ -71,6 +72,7 @@
           - nautilus
           - transmission
           - vinagre # vnc
+          - virtualbox
           - vlc
           - wireshark
 
@@ -283,10 +285,15 @@
   tasks:
     - debug: msg="Reboot the machine now!"
 
-# - name: misc
-#   hosts: all
-#   tasks:
-#     - shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Vertex-Dark"'
+- name: misc
+  hosts: all
+  tasks:
+    # - shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Vertex-Dark"'
+    - shell: 'gsettings set apps.light-locker late-locking false'
+    - shell: 'gsettings set apps.light-locker lock-after-screensaver -1'
+    - shell: 'gsettings set apps.light-locker lock-on-suspend false'
+    - shell: 'gsettings set apps.light-locker lock-on-lid false'
+    - shell: 'gsettings set apps.light-locker idle-hint false'
 
 # Local Variables:
 # mode: yaml
