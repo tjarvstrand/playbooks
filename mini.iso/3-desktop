@@ -40,7 +40,7 @@
           - notify-osd
           - redshift # screen color temperature
           - xfce4-power-manager
-          - xfce4-screenshooter-plugin
+          - xfce4-screenshooter
 
           # System tools
           - baobab
@@ -286,7 +286,7 @@
   tasks:
     # - shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Vertex-Dark"'
     - shell: 'gsettings set apps.light-locker late-locking false'
-    - shell: 'gsettings set apps.light-locker lock-after-screensaver -1'
+    - shell: 'gsettings set apps.light-locker lock-after-screensaver 0'
     - shell: 'gsettings set apps.light-locker lock-on-suspend false'
     - shell: 'gsettings set apps.light-locker lock-on-lid false'
     - shell: 'gsettings set apps.light-locker idle-hint false'

@@ -7,7 +7,6 @@
       args:
         name:
           - python3-pip
-          - python3-virtualenv
       become: yes
     - name: Install virtualenv
       action: pip
@@ -20,10 +19,14 @@
       args:
         name: libffi-dev
       become: yes
-    - name: Setup virtualenv
+    - name: Install virtualenv
       action: pip
       args:
         executable: pip3
+        name: virtualenv
+    - name: Setup virtualenv
+      action: pip
+      args:
         virtualenv_site_packages: yes
         virtualenv: "{{lookup('ENV', 'HOME')}}/.virtualenv"
         name:

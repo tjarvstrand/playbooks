@@ -99,7 +99,7 @@
           - cryptsetup-bin # luks encryption
           - daemontools # check this out!
           - emacs
-          - emacs25-el
+          - emacs-el
           - emacs-goodies-el
           - git
           - gnupg
