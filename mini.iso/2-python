@@ -7,26 +7,18 @@
       args:
         name:
           - python3-pip
-      become: yes
-    - name: Install virtualenv
-      action: pip
-      args:
-        name: virtualenv
-        executable: pip3
+          - python3-venv
       become: yes
     - name: Install libffi
       action: apt
       args:
         name: libffi-dev
       become: yes
-    - name: Install virtualenv
-      action: pip
-      args:
-        executable: pip3
-        name: virtualenv
+
     - name: Setup virtualenv
       action: pip
       args:
+        virtualenv_command: /usr/bin/python3 -m venv
         virtualenv_site_packages: yes
         virtualenv: "{{lookup('ENV', 'HOME')}}/.virtualenv"
         name:
@@ -38,22 +30,6 @@
           - stashy
           - docker-compose
           - localstack
-    #     - python-jenkins
-
-    #     # Fix InsecurePlatformWarning in Python < 2.7.9
-    #     - pyopenssl
-    #     - ndg-httpsclient
-    #     - pyasn1
-    # - shell: >
-    #     . {{lookup('ENV', 'HOME')}}/.virtualenv/bin/activate && python -c 'from requests import certs; print certs.where()'
-    #   register: ca_cert
-    # - action: file
-    #   args:
-    #     state: link
-    #     force: true
-    #     dest: "{{ca_cert.stdout}}"
-    #     src: /usr/lib/ssl/certs/ca-certificates.crt
-    #     follow: false
 
 # Local Variables:
 # mode: yaml

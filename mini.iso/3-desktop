@@ -78,6 +78,7 @@
           - wireshark
 
           # UI
+          - arc-theme
           - numix-gtk-theme # for xfce4-notifyd
           - ttf-mscorefonts-installer
           - ttf-ubuntu-font-family
@@ -283,6 +284,8 @@
 
 - name: misc
   hosts: all
+  tags:
+    - polybar
   tasks:
     # - shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Vertex-Dark"'
     - shell: 'gsettings set apps.light-locker late-locking false'
@@ -290,6 +293,64 @@
     - shell: 'gsettings set apps.light-locker lock-on-suspend false'
     - shell: 'gsettings set apps.light-locker lock-on-lid false'
     - shell: 'gsettings set apps.light-locker idle-hint false'
+
+- name: Polybar
+  hosts: all
+  vars:
+    dir: "{{ \"~/src/polybar\" | expanduser }}"
+  tasks:
+    - name: Install deps
+      action: apt
+      become: yes
+      args:
+        name:
+          - cmake
+          - cmake-data
+          - pkg-config
+          - libcairo2-dev
+          - libxcb1-dev
+          - libxcb-util0-dev
+          - libxcb-randr0-dev
+          - libxcb-composite0-dev
+          - python-xcbgen
+          - xcb-proto
+          - libxcb-image0-dev
+          - libxcb-ewmh-dev
+          - libxcb-icccm4-dev
+          - python3-sphinx
+
+          # Optional
+          - libxcb-xkb-dev
+    - name: Clone repo
+      action: git
+      args:
+        recursive: yes
+        repo: https://github.com/jaagr/polybar.git
+        dest: "{{dir}}"
+    - name: Create build directory
+      action: file
+      args:
+        state: directory
+        dest: "{{dir}}/build"
+    - name: Compile
+      shell: cmake ..
+      args:
+        chdir: "{{dir}}/build"
+    - name: Install
+      shell: make install
+      become: yes
+      args:
+        chdir: "{{dir}}/build"
+    - action: get_url
+      name: Fetch Font Awesome
+      args:
+        dest: "{{ \"~/Downloads\" | expanduser }}"
+        url: https://use.fontawesome.com/releases/v5.10.2/fontawesome-free-5.10.2-desktop.zip
+    - name: Unpack Font Awesome
+      action: unarchive
+      args:
+        dest: "{{ \"~/Downloads\" | expanduser }}"
+        src: "/usr/share/fonts"
 
 - name: Restart
   hosts: all

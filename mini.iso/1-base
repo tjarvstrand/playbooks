@@ -88,6 +88,7 @@
         name:
           - alsa-utils
           - aptitude
+          - apt-transport-https
           - autoconf
           - build-essential
           - cifs-utils # Samba
