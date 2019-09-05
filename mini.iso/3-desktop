@@ -48,6 +48,7 @@
           - dconf-editor
           - dconf-gsettings-backend
           - dconf-service
+          - gconf-editor
           - gparted
           - gsettings-desktop-schemas
           - gsettings-ubuntu-schemas
@@ -284,18 +285,25 @@
 
 - name: misc
   hosts: all
-  tags:
-    - polybar
   tasks:
-    # - shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Vertex-Dark"'
     - shell: 'gsettings set apps.light-locker late-locking false'
     - shell: 'gsettings set apps.light-locker lock-after-screensaver 0'
     - shell: 'gsettings set apps.light-locker lock-on-suspend false'
     - shell: 'gsettings set apps.light-locker lock-on-lid false'
     - shell: 'gsettings set apps.light-locker idle-hint false'
 
+      # Fonts are also set in ~/.gtkrc-2.0, ~/.config/gtk-3.0/settings.ini and ~/.Xdefaults
+    - shell: 'gsettings set org.gnome.desktop.interface cursor-size 16'
+    - shell: 'gsettings set org.gnome.desktop.interface cursor-theme DMZ-White'
+    - shell: 'gsettings set org.gnome.desktop.interface gtk-theme Arc-Dark'
+    - shell: 'update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-White/cursor.theme'
+      become: yes
+
+
 - name: Polybar
   hosts: all
+  tags:
+    - polybar
   vars:
     dir: "{{ \"~/src/polybar\" | expanduser }}"
   tasks:
@@ -348,9 +356,10 @@
         url: https://use.fontawesome.com/releases/v5.10.2/fontawesome-free-5.10.2-desktop.zip
     - name: Unpack Font Awesome
       action: unarchive
+      become: yes
       args:
-        dest: "{{ \"~/Downloads\" | expanduser }}"
-        src: "/usr/share/fonts"
+        src: "{{ \"~/Downloads\" | expanduser }}/fontawesome-free-5.10.2-desktop.zip"
+        dest: "/usr/share/fonts"
 
 - name: Restart
   hosts: all
