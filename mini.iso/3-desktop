@@ -39,7 +39,7 @@
           - libnotify-bin
           - notify-osd
           - redshift # screen color temperature
-          - xfce4-power-manager
+          - mate-power-manager
           - xfce4-screenshooter
 
           # System tools
