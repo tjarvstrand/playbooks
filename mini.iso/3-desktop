@@ -283,8 +283,10 @@
        - "{{dropbox_link_dirs}}"
 
 
-- name: misc
+- name: Misc. Settings
   hosts: all
+  tags:
+    - settings
   tasks:
     - shell: 'gsettings set apps.light-locker late-locking false'
     - shell: 'gsettings set apps.light-locker lock-after-screensaver 0'
@@ -298,6 +300,15 @@
     - shell: 'gsettings set org.gnome.desktop.interface gtk-theme Arc-Dark'
     - shell: 'update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-White/cursor.theme'
       become: yes
+
+    - name: Enable Eye of Gnome in Nautilus etc.
+      action: lineinfile
+      become: yes
+      args:
+        backrefs: yes
+        regexp: '^(Exec=.*)'
+        line: '\1 %F'
+        path: /usr/share/applications/eog.desktop
 
 
 - name: Polybar
