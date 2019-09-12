@@ -58,10 +58,10 @@
           - nautilus-dropbox
           - network-manager-openvpn-gnome
           - pavucontrol
-          - python-pip
           - suckless-tools
           - synaptic
           - terminator
+          - unity-greeter
 
           # Applications
           - eog # Eye of Gnome
@@ -80,12 +80,12 @@
 
           # UI
           - arc-theme
+          - elementary-xfce-icon-theme
           - numix-gtk-theme # for xfce4-notifyd
           - ttf-mscorefonts-installer
           - ttf-ubuntu-font-family
           - xcursor-themes
-          - xubuntu-icon-theme
-          - adwaita-icon-theme
+          - ubuntu-wallpapers
 
           - xmonad
           - libdbusmenu-gtk3-dev
