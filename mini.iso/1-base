@@ -45,10 +45,26 @@
         - ~/Videos
         - ~/examples.desktop
 
-- name: Install packages
+- name: Install base packages
   hosts: all
   become: yes
+  tags:
+    - base-packages
   tasks:
+    - name: Disable installation of recommended packages
+      action: lineinfile
+      args:
+        create: yes
+        regexp: "[# ]*APT::Install-Recommends.*"
+        line: 'APT::Install-Recommends "false";'
+        dest: /etc/apt/apt.conf.d/99z-norecommend
+    - name: Disable installation of recommended packages
+      action: lineinfile
+      args:
+        regexp: "[# ]*APT::Install-Suggests.*"
+        line: 'APT::Install-Suggests "false";'
+        dest: /etc/apt/apt.conf.d/99z-norecommend
+
     - action: apt
       name: Install lsb-core
       args:
@@ -163,14 +179,14 @@
     - name: Configure journalctl
       action: lineinfile
       args:
-        regexp: "[#]?Storage="
+        regexp: "[#]?Storage=.*"
         line: "Storage=persistent"
         dest: /etc/systemd/journald.conf
 
     - name: Configure journalctl
       action: lineinfile
       args:
-        regexp: "[#]?SystemMaxUse="
+        regexp: "[#]?SystemMaxUse=.*"
         line: "SystemMaxUse=20M"
         dest: /etc/systemd/journald.conf
 
@@ -180,7 +196,6 @@
         regexp: ^MOUNTOPTIONS=
         line: MOUNTOPTIONS="sync,noexec,nodev,noatime,nodiratime,uid=1000,gid=1000"
         dest: /etc/usbmount/usbmount.conf
-
 
     - name: Restart journal
       action: systemd
